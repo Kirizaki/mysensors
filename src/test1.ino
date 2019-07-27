@@ -1,5 +1,3 @@
-
-
 // Enable debug prints to serial monitor
 #define MY_DEBUG 
 
@@ -11,34 +9,19 @@
 #define MY_BAUD_RATE 115200
 #endif
 
-// Flash leds on rx/tx/err
-// #define MY_LEDS_BLINKING_FEATURE
-// Set blinking period
-// #define MY_DEFAULT_LED_BLINK_PERIOD 300
-
-// Inverses the behavior of leds
-// #define MY_WITH_LEDS_BLINKING_INVERSE
-
 // Enable inclusion mode
 #define MY_INCLUSION_MODE_FEATURE
 // Enable Inclusion mode button on gateway
 #define MY_INCLUSION_BUTTON_FEATURE
-
-// Inverses behavior of inclusion button (if using external pullup)
-//#define MY_INCLUSION_BUTTON_EXTERNAL_PULLUP
 
 // Set inclusion mode duration (in seconds)
 #define MY_INCLUSION_MODE_DURATION 60 
 // Digital pin used for inclusion mode button
 #define MY_INCLUSION_MODE_BUTTON_PIN  3 
 
-// Uncomment to override default HW configurations
-//#define MY_DEFAULT_ERR_LED_PIN 4  // Error led pin
-//#define MY_DEFAULT_RX_LED_PIN  6  // Receive led pin
-//#define MY_DEFAULT_TX_LED_PIN  5  // the PCB, on board LED
-
 #include <MySensors.h>  
 #include "OneButton.h"
+
 // Enable repeater functionality for this node
 #define MY_REPEATER_FEATURE
 
@@ -67,12 +50,18 @@ void setup() {
 void presentation()  
 {   
   // Send the sketch version information to the gateway and Controller
-  sendSketchInfo("Relay", "1.0");
-
-  for (int sensor=1, pin=RELAY_1; sensor<=NUMBER_OF_RELAYS;sensor++, pin++) {
+  sendSketchInfo("Relay", "1.1");
+  present(1, S_LIGHT, "salon S1");
+  present(2, S_LIGHT, "salon S2");
+  present(3, S_LIGHT, "gralnia S1");
+  present(4, S_LIGHT, "gralnia S2");
+  present(5, S_LIGHT, "sypialnia S1");
+  present(6, S_LIGHT, "sypialnia S2");
+  present(7, S_LIGHT, "sypialnia S3");
+  /*/for (int sensor=1, pin=RELAY_1; sensor<=NUMBER_OF_RELAYS;sensor++, pin++) {
     // Register all sensors to gw (they will be created as child devices)
     present(sensor, S_LIGHT);
-  }
+  }*/
 }
 
 MyMessage msg(1, V_LIGHT);
@@ -95,6 +84,9 @@ void receive(const MyMessage &message) {
      // Store state in eeprom
      saveState(message.sensor, message.getBool());
      // Write some debug info
+    ////wyslac potwierdzenie zmiany!
+    send(msg.set(loadState(message.sensor)));
+    
      Serial.print("Incoming change for sensor:");
      Serial.print(message.sensor);
      Serial.print(", New status: ");
