@@ -9,22 +9,8 @@
 #define MY_BAUD_RATE 115200
 #endif
 
-// Enable inclusion mode
-#define MY_INCLUSION_MODE_FEATURE
-// Enable Inclusion mode button on gateway
-#define MY_INCLUSION_BUTTON_FEATURE
-
-// Set inclusion mode duration (in seconds)
-#define MY_INCLUSION_MODE_DURATION 60 
-// Digital pin used for inclusion mode button
-#define MY_INCLUSION_MODE_BUTTON_PIN  3 
-
 #include <MySensors.h>  
 #include "OneButton.h"
-
-// Enable repeater functionality for this node
-#define MY_REPEATER_FEATURE
-
 
 #define RELAY_1  26  // Arduino Digital I/O pin number for first relay (second on pin+1 etc)
 #define NUMBER_OF_RELAYS 13 // Total number of attached relays
@@ -58,10 +44,6 @@ void presentation()
   present(5, S_LIGHT, "sypialnia S1");
   present(6, S_LIGHT, "sypialnia S2");
   present(7, S_LIGHT, "sypialnia S3");
-  /*/for (int sensor=1, pin=RELAY_1; sensor<=NUMBER_OF_RELAYS;sensor++, pin++) {
-    // Register all sensors to gw (they will be created as child devices)
-    present(sensor, S_LIGHT);
-  }*/
 }
 
 MyMessage msg(1, V_LIGHT);
@@ -73,6 +55,7 @@ void loop() {
 void click1() {
   saveState(1, !loadState(1));
   digitalWrite(RELAY_1, loadState(1)?RELAY_ON:RELAY_OFF);
+         MyMessage msg(1, V_LIGHT);
          send(msg.set(loadState(1)));
 } // click1
  
@@ -85,11 +68,7 @@ void receive(const MyMessage &message) {
      saveState(message.sensor, message.getBool());
      // Write some debug info
     ////wyslac potwierdzenie zmiany!
+    MyMessage msg(message.sensor-1+RELAY_1, V_LIGHT);
     send(msg.set(loadState(message.sensor)));
-    
-     Serial.print("Incoming change for sensor:");
-     Serial.print(message.sensor);
-     Serial.print(", New status: ");
-     Serial.println(message.getBool());
    } 
 }
