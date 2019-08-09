@@ -39,26 +39,18 @@ void presentation()
   // Send the sketch version information to the gateway and Controller
   sendSketchInfo("Relay", "1.1");
   present(1, S_LIGHT, "salon S1");
-    msg.setSensor(1);
-    send(msg.set(loadState(1)));
   present(2, S_LIGHT, "salon S2");
-    msg.setSensor(2);
-    send(msg.set(loadState(2)));
   present(3, S_LIGHT, "gralnia S1");
-    msg.setSensor(3);
-    send(msg.set(loadState(3)));
   present(4, S_LIGHT, "gralnia S2");
-    msg.setSensor(4);
-    send(msg.set(loadState(4)));
   present(5, S_LIGHT, "sypialnia S1");
-    msg.setSensor(5);
-    send(msg.set(loadState(5)));
   present(6, S_LIGHT, "sypialnia S2");
-    msg.setSensor(6);
-    send(msg.set(loadState(6)));
   present(7, S_LIGHT, "sypialnia S3");
-    msg.setSensor(7);
-    send(msg.set(loadState(7)));
+  
+  // Send actual states
+  for (int i=1; i <=21 ; i++) {
+    msg.setSensor(i);
+    send(msg.set(loadState(i)));
+  }
 }
 
 void loop() { 
