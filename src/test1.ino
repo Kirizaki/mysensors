@@ -14,8 +14,6 @@
 
 #define RELAY_1  26  // Arduino Digital I/O pin number for first relay (second on pin+1 etc)
 #define NUMBER_OF_RELAYS 13 // Total number of attached relays
-#define RELAY_ON 1  // GPIO value to write to turn on attached relay
-#define RELAY_OFF 0 // GPIO value to write to turn off attached relay
 
 OneButton button1(A1, true);
 
@@ -24,7 +22,7 @@ void before() {
     // Then set relay pins in output mode
     pinMode(pin, OUTPUT);   
     // Set relay to last known state (using eeprom storage) 
-    digitalWrite(pin, loadState(sensor)?RELAY_ON:RELAY_OFF);
+    digitalWrite(pin, loadState(sensor)?1:0);
   }
 }
 
@@ -38,8 +36,14 @@ void presentation()
   // Send the sketch version information to the gateway and Controller
   sendSketchInfo("Relay", "1.1");
   present(1, S_LIGHT, "salon S1");
+    MyMessage msg(1, V_LIGHT);
+    send(msg.set(loadState(1)));
   present(2, S_LIGHT, "salon S2");
+    msg.setSensor(2);
+    send(msg.set(loadState(2)));
   present(3, S_LIGHT, "gralnia S1");
+    msg.setSensor(3);
+    send(msg.set(loadState(3)));
   present(4, S_LIGHT, "gralnia S2");
   present(5, S_LIGHT, "sypialnia S1");
   present(6, S_LIGHT, "sypialnia S2");
@@ -54,7 +58,7 @@ void loop() {
 }
 void click1() {
   saveState(1, !loadState(1));
-  digitalWrite(RELAY_1, loadState(1)?RELAY_ON:RELAY_OFF);
+  digitalWrite(RELAY_1, loadState(1)?1:0);
          MyMessage msg(1, V_LIGHT);
          send(msg.set(loadState(1)));
 } // click1
@@ -63,12 +67,11 @@ void receive(const MyMessage &message) {
   // We only expect one type of message from controller. But we better check anyway.
   if (message.type==V_LIGHT) {
      // Change relay state
-     digitalWrite(message.sensor-1+RELAY_1, message.getBool()?RELAY_ON:RELAY_OFF);
+     digitalWrite(message.sensor-1+RELAY_1, message.getBool()?1:0);
      // Store state in eeprom
      saveState(message.sensor, message.getBool());
-     // Write some debug info
-    ////wyslac potwierdzenie zmiany!
-    MyMessage msg(message.sensor-1+RELAY_1, V_LIGHT);
+    // wyslac potwierdzenie zmiany!
+    msg.setSensor(message.sensor);
     send(msg.set(loadState(message.sensor)));
    } 
 }
