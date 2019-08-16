@@ -9,27 +9,65 @@
 #define MY_BAUD_RATE 115200
 #endif
 
-#include <MySensors.h>  
+// Remember to add library over IDE
+#include <ArduinoSTL.h>
+#include <MySensors.h>
 #include "OneButton.h"
 
-#define RELAY_1  26  // Arduino Digital I/O pin number for first relay (second on pin+1 etc)
-#define NUMBER_OF_RELAYS 13 // Total number of attached relays
+#define MAX_SENSORS 7
 
 OneButton button1(A1, true);
+OneButton button7(A7, true);
 
-void before() { 
-  for (int sensor=1, pin=RELAY_1; sensor<=NUMBER_OF_RELAYS;sensor++, pin++) {
-    // Then set relay pins in output mode
-    pinMode(pin, OUTPUT);   
-    // Set relay to last known state (using eeprom storage) 
-    digitalWrite(pin, loadState(sensor)?1:0);
+using namespace std;
+
+class CustomSensor {
+public:
+  CustomSensor(const uint8_t& _id, const String& _desc, const uint8_t& _pin, const uint8_t& _zone = 0) {
+    id = _id;
+    description = _desc;
+    pin = _pin;
+    zone = _zone;
+    message = MyMessage(id, V_LIGHT);
+  };
+
+  static CustomSensor getSensorById(const uint8_t& sensorId, const vector<CustomSensor>& sensors) {
+    for (const CustomSensor sensor : sensors) {
+      if (sensor.id == sensorId) return sensor;
+    }
+
+    return CustomSensor(0, "UNKNOWN", 0);
+  }
+
+  uint8_t id;
+  String description;
+  uint8_t pin;
+  uint8_t zone;
+  MyMessage message;
+};
+
+vector<CustomSensor> customSensors = vector<CustomSensor>() = {
+  { CustomSensor(1, "Salon S1", 26) },
+  { CustomSensor(2, "Salon S2", 27) },
+  { CustomSensor(3, "Salon S3", 28) },
+  { CustomSensor(4, "Salon S4", 29) },
+  { CustomSensor(5, "Salon S5", 30) },
+  { CustomSensor(6, "Salon S6", 31) },
+  { CustomSensor(7, "Salon S7", 32) }
+};
+
+void before() {
+  for (const CustomSensor sensor : customSensors) {
+    const uint8_t pin = sensor.pin;
+    pinMode(pin, OUTPUT);
+    digitalWrite(pin, loadState(sensor.id) ? 1 : 0);
   }
 }
 
 void setup() { 
    // Setup the button.
   button1.attachClick(click1);
-  //presentation();
+  button7.attachClick(click7);
 }
 
 MyMessage msg(1, V_LIGHT);
@@ -38,42 +76,44 @@ void presentation()
 {   
   // Send the sketch version information to the gateway and Controller
   sendSketchInfo("Relay", "1.1");
-  present(1, S_LIGHT, "salon S1");
-  present(2, S_LIGHT, "salon S2");
-  present(3, S_LIGHT, "gralnia S1");
-  present(4, S_LIGHT, "gralnia S2");
-  present(5, S_LIGHT, "sypialnia S1");
-  present(6, S_LIGHT, "sypialnia S2");
-  present(7, S_LIGHT, "sypialnia S3");
   
   // Send actual states
-  for (int i=1; i <=21 ; i++) {
-    msg.setSensor(i);
-    send(msg.set(loadState(i)));
+  for (const CustomSensor sensor : customSensors) {
+    const uint8_t id = sensor.id;
+    present(id, S_LIGHT, sensor.description.begin());
+    send(sensor.message.set(loadState(id)));
   }
 }
 
 void loop() { 
   // keep sensing buttons
   button1.tick();
+  button7.tick();
 }
 
 void click1() {
-  saveState(1, !loadState(1));
-  digitalWrite(RELAY_1, loadState(1)?1:0);
-         msg.setSensor(1);
-         send(msg.set(loadState(1)));
+  const CustomSensor sensor = CustomSensor::getSensorById(1, customSensors);
+  saveState(sensor.id, !loadState(sensor.id));
+  digitalWrite(sensor.pin, loadState(sensor.id) ? 1 : 0);
+  send(sensor.message.set(loadState(sensor.id)));
 } // click1
+
+void click7() {
+  const CustomSensor sensor = CustomSensor::getSensorById(7, customSensors);
+  saveState(sensor.id, !loadState(sensor.id));
+  digitalWrite(sensor.pin, loadState(sensor.id) ? 1 : 0);
+  send(sensor.message.set(loadState(sensor.id)));
+} // click7
  
 void receive(const MyMessage &message) {
   // We only expect one type of message from controller. But we better check anyway.
   if (message.type==V_LIGHT) {
+    const CustomSensor sensor = CustomSensor::getSensorById(message.sensor, customSensors);
      // Change relay state
-     digitalWrite(message.sensor-1+RELAY_1, message.getBool()?1:0);
+     digitalWrite(sensor.pin, message.getBool() ? 1 : 0);
      // Store state in eeprom
-     saveState(message.sensor, message.getBool());
+     saveState(sensor.id, message.getBool());
     // wyslac potwierdzenie zmiany!
-    msg.setSensor(message.sensor);
-    send(msg.set(loadState(message.sensor)));
+    send(sensor.message.set(loadState(sensor.id)));
    } 
 }
