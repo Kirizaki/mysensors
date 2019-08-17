@@ -14,8 +14,6 @@
 #include <MySensors.h>
 #include "OneButton.h"
 
-#define MAX_SENSORS 7
-
 OneButton button1(A1, true);
 OneButton button7(A7, true);
 
