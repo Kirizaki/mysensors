@@ -1,7 +1,7 @@
 ## Connections
 
 
-|child  | Name          |Output |short  |long       |dubble | 
+|child  | Name          |Output |short  |long       |double |
 |-------|---------------|-------|-------|-------    |-------|
 |1      | salon S1      |D26    |A1     |           |       |
 |2      | salon S2	    |D27    |A1     |A1         |       |
