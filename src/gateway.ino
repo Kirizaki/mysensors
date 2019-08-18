@@ -18,54 +18,13 @@
 #define MY_BAUD_RATE 115200
 #endif
 
-// Remember to add library over IDE
+// Remember to add library to Arduino path
 #include <ArduinoSTL.h>
 #include <MySensors.h>
-#include "OneButton.h"
-
-OneButton button1(A1, true);
-OneButton button7(A7, true);
-
-using namespace std;
-
-class CustomSensor {
-public:
-  CustomSensor(const uint8_t& _id, const String& _desc, const uint8_t& _pin, const uint8_t& _zone) {
-    id = _id;
-    description = _desc;
-    pin = _pin;
-    zone = _zone;
-    message = MyMessage(id, V_LIGHT);
-  }
-
-  static CustomSensor getSensorById(const uint8_t& sensorId, const vector<CustomSensor>& sensors) {
-    for (const CustomSensor sensor : sensors) {
-      if (sensor.id == sensorId) return sensor;
-    }
-
-    return CustomSensor(0, "UNKNOWN", 0, 0);
-  }
-
-  void sendMsg() {
-    send(message.set(loadState(id)));
-  }
-
-  uint8_t id;
-  String description;
-  uint8_t pin;
-  uint8_t zone;
-  MyMessage message;
-};
-
-vector<CustomSensor> customSensors = vector<CustomSensor>() = {
-  { CustomSensor(1, "Salon S1", 26, 1) },
-  { CustomSensor(2, "Salon S2", 27, 1) },
-  { CustomSensor(3, "Salon S3", 28, 1) },
-  { CustomSensor(4, "Salon S4", 29, 2) },
-  { CustomSensor(5, "Salon S5", 30, 2) },
-  { CustomSensor(6, "Salon S6", 31, 3) },
-  { CustomSensor(7, "Salon S7", 32, 3) }
-};
+#include <OneButton.h>
+#include "./src/CustomSensor/CustomSensor.h"
+#include "./src/Mapping/Mapping.h"
+#include "./src/Automation/Automation.h"
 
 void before() {
   for (const CustomSensor sensor : customSensors) {
@@ -77,8 +36,44 @@ void before() {
 
 void setup() {
   // Setup the button.
-  button1.attachClick(click1);
-  button7.attachClick(click7);
+  saloon.attachClick(saloonClick);
+  saloon.attachLongPressStop(saloonLongClick);
+  saloon.attachDoubleClick(saloonDoubleClick);
+
+  gamingRoom.attachClick(gamingRoomClick);
+  gamingRoom.attachLongPressStop(gamingRoomLongClick);
+  gamingRoom.attachDoubleClick(gamingRoomDoubleClick);
+
+  bedroom.attachClick(bedroomClick);
+  bedroom.attachLongPressStop(bedroomLongClick);
+  // bedroom.attachDoubleClick(bedroomDoubleClick); ??
+
+  bed1.attachClick(bed1Click);
+  bed1.attachLongPressStop(bedroomLongClick);
+  bed1.attachDoubleClick(bed2Click);
+
+  bed2.attachClick(bed2Click);
+  bed2.attachLongPressStop(bedroomLongClick);
+  bed2.attachDoubleClick(bed1Click);
+
+  guests.attachClick(guestsClick);
+
+  bathroom.attachClick(bathroomClick);
+  bathroom.attachLongPressStop(bathroomLongClick);
+  // bathroom.attachDoubleClick(bathroomDoubleClick); ??
+
+  mirror.attachClick(mirrorClick);
+
+  kitchen.attachClick(kitchenClick);
+  kitchen.attachLongPressStop(kitchenLongClick);
+  kitchen.attachDoubleClick(kitchenDoubleClick);
+
+  kitchenTable.attachClick(kitchenTableClick);
+
+  workshop.attachClick(workshopClick);
+
+  corridor.attachClick(corridorClick);
+  // corridor.attachDuringLongPress(corridorDuringLongClick); ??
 }
 
 void presentation()
@@ -95,22 +90,18 @@ void presentation()
 
 void loop() {
   // Keep sensing buttons
-  button1.tick();
-  button7.tick();
-}
-
-void click1() {
-  CustomSensor sensor = CustomSensor::getSensorById(1, customSensors);
-  saveState(sensor.id, !loadState(sensor.id));
-  digitalWrite(sensor.pin, loadState(sensor.id));
-  sensor.sendMsg();
-}
-
-void click7() {
-  CustomSensor sensor = CustomSensor::getSensorById(7, customSensors);
-  saveState(sensor.id, !loadState(sensor.id));
-  digitalWrite(sensor.pin, loadState(sensor.id));
-  sensor.sendMsg();
+  saloon.tick();
+  gamingRoom.tick();
+  bedroom.tick();
+  bed1.tick();
+  bed2.tick();
+  guests.tick();
+  bathroom.tick();
+  mirror.tick();
+  kitchen.tick();
+  kitchenTable.tick();
+  workshop.tick();
+  corridor.tick();
 }
 
 void receive(const MyMessage &message) {
