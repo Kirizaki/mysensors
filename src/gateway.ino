@@ -47,7 +47,7 @@ void setup() {
 void presentation()
 {
   // Send the sketch version information to the gateway and Controller
-  sendSketchInfo("Relay", "1.1");
+  sendSketchInfo("Gateway", "1.0");
 
   // Send actual states
   for (CustomSensor sensor : customSensors) {
