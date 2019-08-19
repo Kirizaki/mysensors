@@ -30,7 +30,14 @@ void before() {
   for (const CustomSensor sensor : customSensors) {
     const uint8_t pin = sensor.pin;
     pinMode(pin, OUTPUT);
-    digitalWrite(pin, loadState(sensor.id));
+
+    uint8_t currentState = loadState(sensor.id);
+    // Check whether EEPROM cell was used before
+    if (currentState == 0xFF) {
+      currentState = Relay::CMD_OFF;
+      saveState(sensor.id, currentState);
+    }
+    digitalWrite(pin, currentState);
   }
 }
 

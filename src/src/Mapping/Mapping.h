@@ -12,6 +12,12 @@
 #include <OneButton.h>
 #include "../CustomSensor/CustomSensor.h"
 
+namespace Relay {
+  const uint8_t CMD_OFF  = 0;
+  const uint8_t CMD_ON   = 1;
+  const uint8_t CMD_FLIP = 2;
+}
+
 const uint8_t RESERVED_ID       = 0;
 const uint8_t SALOON_1_ID       = 1;
 const uint8_t SALOON_2_ID       = 2;
