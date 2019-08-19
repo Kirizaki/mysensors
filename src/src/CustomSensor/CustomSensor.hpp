@@ -31,10 +31,6 @@ public:
     return CustomSensor(0, "UNKNOWN", 0);
   }
 
-  void sendMsg() {
-    send(message.set(loadState(id)));
-  }
-
   uint8_t id;
   const char* description;
   uint8_t pin;

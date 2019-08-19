@@ -7,9 +7,6 @@
  * @license GPL V2 ?!
  */
 
-// Enable debug prints to serial monitor
-#define MY_DEBUG
-
 // Enable serial gateway
 #define MY_GATEWAY_SERIAL
 
@@ -21,9 +18,9 @@
 // Remember to add library to Arduino path
 #include <ArduinoSTL.h>
 #include <MySensors.h>
-#include "./src/CustomSensor/CustomSensor.h"
-#include "./src/Mapping/Mapping.h"
-#include "./src/Automation/Automation.h"
+#include "./src/CustomSensor/CustomSensor.hpp"
+#include "./src/Mapping/Mapping.hpp"
+#include "./src/Automation/Automation.hpp"
 
 void before() {
   for (const CustomSensor sensor : customSensors) {
@@ -33,7 +30,7 @@ void before() {
     uint8_t currentState = loadState(sensor.id);
     // Check whether EEPROM cell was used before
     if (currentState == 0xFF) {
-      currentState = Relay::CMD_OFF;
+      currentState = Relay::OFF;
       saveState(sensor.id, currentState);
     }
     digitalWrite(pin, currentState);
@@ -52,7 +49,7 @@ void presentation()
   // Send actual states
   for (CustomSensor sensor : customSensors) {
     present(sensor.id, S_LIGHT, sensor.description);
-    sensor.sendMsg();
+    send(sensor.message.set(loadState(sensor.id)));
   }
 }
 
@@ -76,11 +73,12 @@ void receive(const MyMessage &message) {
   // We only expect one type of message from controller. But we better check anyway.
   if (message.type==V_LIGHT) {
     CustomSensor sensor = CustomSensor::getSensorById(message.sensor, customSensors);
+    const bool value = message.getBool();
     // Store state in eeprom
-    saveState(sensor.id, message.getBool());
+    saveState(sensor.id, value);
     // Change relay state
-    digitalWrite(sensor.pin, message.getBool());
+    digitalWrite(sensor.pin, value);
     // Send ACK
-    sensor.sendMsg();
+    send(sensor.message.set(value));
   }
 }

@@ -7,22 +7,19 @@
  * @license GPL V2 ?!
  */
 
-#include "../CustomSensor/CustomSensor.h"
-#include "../Mapping/Mapping.h"
+#pragma once
 
-void setOutput(const uint8_t& sensorId, uint8_t cmd = Relay::CMD_FLIP) {
+#include "../CustomSensor/CustomSensor.hpp"
+#include "../Mapping/Mapping.hpp"
+
+void setOutput(const uint8_t& sensorId, const uint8_t& cmd = Relay::FLIP) {
   CustomSensor sensor = CustomSensor::getSensorById(sensorId, customSensors);
-  bool currentState = loadState(sensor.id);
-  if (cmd == Relay::CMD_FLIP) {
-    currentState = !currentState;
-  } else {
-    currentState = cmd;
-  }
+  const uint8_t state = (cmd == Relay::FLIP) ? !loadState(sensor.id) : cmd;
 
-  saveState(sensor.id, currentState);
-  digitalWrite(sensor.pin, currentState);
+  saveState(sensor.id, state);
+  digitalWrite(sensor.pin, state);
 
-  sensor.sendMsg();
+  send(sensor.message.set(state));
 }
 
 void saloonClick() {
@@ -33,16 +30,16 @@ void saloonDoubleClick() {
   // placeholder
 }
 void saloonLongClick() {
-  setOutput(SALOON_1_ID, Relay::CMD_OFF);
-  setOutput(SALOON_2_ID, Relay::CMD_OFF);
+  setOutput(SALOON_1_ID, Relay::OFF);
+  setOutput(SALOON_2_ID, Relay::OFF);
 }
 void gamingRoomClick() {
   setOutput(GAMING_ROOM_1_ID);
   setOutput(GAMING_ROOM_2_ID);
 }
 void gamingRoomLongClick() {
-  setOutput(GAMING_ROOM_1_ID, Relay::CMD_OFF);
-  setOutput(GAMING_ROOM_2_ID, Relay::CMD_OFF);
+  setOutput(GAMING_ROOM_1_ID, Relay::OFF);
+  setOutput(GAMING_ROOM_2_ID, Relay::OFF);
 }
 void gamingRoomDoubleClick() {
     setOutput(GAMING_ROOM_1_ID);
@@ -51,9 +48,9 @@ void bedroomClick() {
   setOutput(BEDROOM_ID);
 }
 void bedroomLongClick() {
-  setOutput(BEDROOM_ID, Relay::CMD_OFF);
-  setOutput(BED_1_ID, Relay::CMD_OFF);
-  setOutput(BED_2_ID, Relay::CMD_OFF);
+  setOutput(BEDROOM_ID, Relay::OFF);
+  setOutput(BED_1_ID, Relay::OFF);
+  setOutput(BED_2_ID, Relay::OFF);
 }
 void bed1Click() {
   setOutput(BED_1_ID);
@@ -69,9 +66,9 @@ void bathroomClick() {
   setOutput(BATHROOM_2_ID);
 }
 void bathroomLongClick() {
-  setOutput(BATHROOM_1_ID, Relay::CMD_OFF);
-  setOutput(BATHROOM_2_ID, Relay::CMD_OFF);
-  setOutput(MIRROR_ID, Relay::CMD_OFF);
+  setOutput(BATHROOM_1_ID, Relay::OFF);
+  setOutput(BATHROOM_2_ID, Relay::OFF);
+  setOutput(MIRROR_ID, Relay::OFF);
 }
 void mirrorClick() {
   setOutput(MIRROR_ID);
@@ -81,9 +78,9 @@ void kitchenClick() {
   setOutput(KITCHEN_2_ID);
 }
 void kitchenLongClick() {
-  setOutput(KITCHEN_1_ID, Relay::CMD_OFF);
-  setOutput(KITCHEN_2_ID, Relay::CMD_OFF);
-  setOutput(KITCHEN_TABLE_ID, Relay::CMD_OFF);
+  setOutput(KITCHEN_1_ID, Relay::OFF);
+  setOutput(KITCHEN_2_ID, Relay::OFF);
+  setOutput(KITCHEN_TABLE_ID, Relay::OFF);
 }
 void kitchenDoubleClick() {
   setOutput(KITCHEN_2_ID);
