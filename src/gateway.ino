@@ -51,7 +51,7 @@ void presentation()
 
   // Send actual states
   for (CustomSensor sensor : customSensors) {
-    present(sensor.id, S_LIGHT, sensor.description.begin());
+    present(sensor.id, S_LIGHT, sensor.description);
     sensor.sendMsg();
   }
 }

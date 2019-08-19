@@ -16,7 +16,7 @@
 
 class CustomSensor {
 public:
-  CustomSensor(const uint8_t& _id, const String& _desc, const uint8_t& _pin) {
+  CustomSensor(const uint8_t& _id, const char* _desc, const uint8_t& _pin) {
     id = _id;
     description = _desc;
     pin = _pin;
@@ -36,7 +36,7 @@ public:
   }
 
   uint8_t id;
-  String description;
+  const char* description;
   uint8_t pin;
   MyMessage message;
 };
