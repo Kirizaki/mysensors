@@ -16,11 +16,10 @@
 
 class CustomSensor {
 public:
-  CustomSensor(const uint8_t& _id, const String& _desc, const uint8_t& _pin, const uint8_t& _zone) {
+  CustomSensor(const uint8_t& _id, const String& _desc, const uint8_t& _pin) {
     id = _id;
     description = _desc;
     pin = _pin;
-    zone = _zone;
     message = MyMessage(id, V_LIGHT);
   }
 
@@ -29,7 +28,7 @@ public:
       if (sensor.id == sensorId) return sensor;
     }
 
-    return CustomSensor(0, "UNKNOWN", 0, 0);
+    return CustomSensor(0, "UNKNOWN", 0);
   }
 
   void sendMsg() {
@@ -39,6 +38,5 @@ public:
   uint8_t id;
   String description;
   uint8_t pin;
-  uint8_t zone;
   MyMessage message;
 };
