@@ -21,7 +21,6 @@
 // Remember to add library to Arduino path
 #include <ArduinoSTL.h>
 #include <MySensors.h>
-#include <OneButton.h>
 #include "./src/CustomSensor/CustomSensor.h"
 #include "./src/Mapping/Mapping.h"
 #include "./src/Automation/Automation.h"
@@ -42,45 +41,7 @@ void before() {
 }
 
 void setup() {
-  // Setup the button.
-  saloon.attachClick(saloonClick);
-  saloon.attachLongPressStop(saloonLongClick);
-  saloon.attachDoubleClick(saloonDoubleClick);
-
-  gamingRoom.attachClick(gamingRoomClick);
-  gamingRoom.attachLongPressStop(gamingRoomLongClick);
-  gamingRoom.attachDoubleClick(gamingRoomDoubleClick);
-
-  bedroom.attachClick(bedroomClick);
-  bedroom.attachLongPressStop(bedroomLongClick);
-  // bedroom.attachDoubleClick(bedroomDoubleClick); ??
-
-  bed1.attachClick(bed1Click);
-  bed1.attachLongPressStop(bedroomLongClick);
-  bed1.attachDoubleClick(bed2Click);
-
-  bed2.attachClick(bed2Click);
-  bed2.attachLongPressStop(bedroomLongClick);
-  bed2.attachDoubleClick(bed1Click);
-
-  guests.attachClick(guestsClick);
-
-  bathroom.attachClick(bathroomClick);
-  bathroom.attachLongPressStop(bathroomLongClick);
-  // bathroom.attachDoubleClick(bathroomDoubleClick); ??
-
-  mirror.attachClick(mirrorClick);
-
-  kitchen.attachClick(kitchenClick);
-  kitchen.attachLongPressStop(kitchenLongClick);
-  kitchen.attachDoubleClick(kitchenDoubleClick);
-
-  kitchenTable.attachClick(kitchenTableClick);
-
-  workshop.attachClick(workshopClick);
-
-  corridor.attachClick(corridorClick);
-  // corridor.attachDuringLongPress(corridorDuringLongClick); ??
+  setupButtons();
 }
 
 void presentation()
