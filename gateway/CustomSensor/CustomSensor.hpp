@@ -4,7 +4,7 @@
  *
  * Representation of Custom Sensor class.
  *
- * @license GPL V2 ?!
+ * @license GPL V2
  */
 
 

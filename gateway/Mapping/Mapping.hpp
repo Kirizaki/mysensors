@@ -4,7 +4,7 @@
  *
  * Mappings.
  *
- * @license GPL V2 ?!
+ * @license GPL V2
  */
 
 #pragma once
@@ -18,6 +18,7 @@ namespace Relay {
   const uint8_t FLIP = 2;
 }
 
+// Child ID declaration of relays
 const uint8_t SALOON_1_ID       = 1;
 const uint8_t SALOON_2_ID       = 2;
 const uint8_t SALOON_3_ID       = 3;
@@ -45,6 +46,7 @@ const uint8_t HEATING_5_ID      = 24;
 const uint8_t HEATING_6_ID      = 25;
 const uint8_t HEATING_7_ID      = 26;
 
+// Vector contaning child ID, description, output pin
 std::vector<CustomSensor> customSensors = std::vector<CustomSensor>() = {
   { CustomSensor(SALOON_1_ID,       "Salon S1",       24) },
   { CustomSensor(SALOON_2_ID,       "Salon S2",       25) },
@@ -74,6 +76,8 @@ std::vector<CustomSensor> customSensors = std::vector<CustomSensor>() = {
   { CustomSensor(HEATING_7_ID,      "Strefa 7",       49) },
 };
 
+// Pushbuttons declaration
+// Remember that names should be consistent with main loop in gateway.ino
 OneButton saloon(A1, true);
 OneButton gamingRoom(A2, true);
 OneButton bedroom(A3, true);

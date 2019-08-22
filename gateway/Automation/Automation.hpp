@@ -4,7 +4,7 @@
  *
  * Automation for buttons & sensors.
  *
- * @license GPL V2 ?!
+ * @license GPL V2
  */
 
 #pragma once
@@ -96,7 +96,7 @@ void corridorClick() {
 }
 
 void setupButtons() {
-    // Setup the button.
+  // Setup the button.
   saloon.attachClick(saloonClick);
   saloon.attachLongPressStop(saloonLongClick);
   saloon.attachDoubleClick(saloonDoubleClick);

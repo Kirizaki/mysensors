@@ -4,7 +4,7 @@
  *
  * Implementation of the MySensors Gateway.
  *
- * @license GPL V2 ?!
+ * @license GPL V2
  */
 
 // Enable serial gateway
@@ -18,9 +18,9 @@
 // Remember to add library to Arduino path
 #include <ArduinoSTL.h>
 #include <MySensors.h>
-#include "./src/CustomSensor/CustomSensor.hpp"
-#include "./src/Mapping/Mapping.hpp"
-#include "./src/Automation/Automation.hpp"
+#include "./CustomSensor/CustomSensor.hpp"
+#include "./Mapping/Mapping.hpp"
+#include "./Automation/Automation.hpp"
 
 void before() {
   for (const CustomSensor sensor : customSensors) {
@@ -48,8 +48,9 @@ void presentation()
 
   // Send actual states
   for (CustomSensor sensor : customSensors) {
-    present(sensor.id, S_LIGHT, sensor.description);
-    send(sensor.message.set(loadState(sensor.id)));
+    const uint8_t id = sensor.id;
+    present(id, S_LIGHT, sensor.description);
+    send(sensor.message.set(loadState(id)));
   }
 }
 
