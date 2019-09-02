@@ -40,6 +40,10 @@ https://www.mysensors.org/download/serial_api_20
 https://www.mysensors.org/about/arduino#basic-structure-of-sketches
 
 ## To do
+
+  - longpress start/stop with flip as bistable switch
+  - longpress start/stop with read as contactron
+  - internally check if pump is not running without zones
   - lights dimming
   - add ds18b20 sensors reading
   - sense if HASS (HomeAssistant) is working to bypass heating control locally

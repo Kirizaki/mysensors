@@ -49,7 +49,7 @@ void presentation()
   // Send actual states
   for (CustomSensor sensor : customSensors) {
     const uint8_t id = sensor.id;
-    present(id, S_LIGHT, sensor.description);
+    present(id, S_BINARY, sensor.description);
     send(sensor.message.set(loadState(id)));
   }
 }
@@ -72,7 +72,7 @@ void loop() {
 
 void receive(const MyMessage &message) {
   // We only expect one type of message from controller. But we better check anyway.
-  if (message.type==V_LIGHT) {
+  if (message.type==V_STATUS) {
     CustomSensor sensor = CustomSensor::getSensorById(message.sensor, customSensors);
     const bool value = message.getBool();
     // Store state in eeprom
