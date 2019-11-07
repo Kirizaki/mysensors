@@ -22,6 +22,7 @@
 #include "./Mapping/Mapping.hpp"
 #include "./Automation/Automation.hpp"
 
+// TODO: Replace duplication of 'saveState' and 'digitalWrite' with 'setOutput'
 void before() {
   for (const CustomSensor sensor : customSensors) {
     const uint8_t pin = sensor.pin;
