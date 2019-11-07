@@ -75,11 +75,7 @@ void receive(const MyMessage &message) {
   if (message.type==V_STATUS) {
     CustomSensor sensor = CustomSensor::getSensorById(message.sensor, customSensors);
     const bool value = message.getBool();
-    // Store state in eeprom
-    saveState(sensor.id, value);
-    // Change relay state
-    digitalWrite(sensor.pin, value);
-    // Send ACK
-    send(sensor.message.set(value));
+    // Store state in eeprom and send message
+    setOutput(sensor.id, value);
   }
 }
