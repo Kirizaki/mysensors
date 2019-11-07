@@ -22,7 +22,6 @@
 #include "./Mapping/Mapping.hpp"
 #include "./Automation/Automation.hpp"
 
-// TODO: Replace duplication of 'saveState' and 'digitalWrite' with 'setOutput'
 void before() {
   for (const CustomSensor sensor : customSensors) {
     const uint8_t pin = sensor.pin;
@@ -76,7 +75,11 @@ void receive(const MyMessage &message) {
   if (message.type==V_STATUS) {
     CustomSensor sensor = CustomSensor::getSensorById(message.sensor, customSensors);
     const bool value = message.getBool();
-    // Store state in eeprom and send message
-    setOutput(sensor.id, value);
+    // Store state in eeprom
+    saveState(sensor.id, value);
+    // Change relay state
+    digitalWrite(sensor.pin, value);
+    // Send ACK
+    send(sensor.message.set(value));
   }
 }
