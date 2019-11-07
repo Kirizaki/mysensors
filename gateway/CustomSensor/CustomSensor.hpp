@@ -20,7 +20,7 @@ public:
     id = _id;
     description = _desc;
     pin = _pin;
-    message = MyMessage(id, V_LIGHT);
+    message = MyMessage(id, V_STATUS);
   }
 
   static CustomSensor getSensorById(const uint8_t& sensorId, const std::vector<CustomSensor>& sensors) {
