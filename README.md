@@ -48,7 +48,7 @@ https://www.mysensors.org/about/arduino#basic-structure-of-sketches
   - add ds18b20 sensors reading
   - sense if HASS (HomeAssistant) is working to bypass heating control locally
   - small LCD for local control of heating
-  - fix https://github.com/th0m4sek/mysensors/issues/8
+  - fix all [Issues](https://github.com/Kirizaki/mysensors/issues)
 
 ## License
 
