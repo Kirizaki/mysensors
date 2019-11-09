@@ -16,11 +16,11 @@
 
 class CustomSensor {
 public:
-  CustomSensor(const uint8_t& _id, const char* _desc, const uint8_t& _pin, const uint8_t& _activelow == 0) {
+  CustomSensor(const uint8_t& _id, const char* _desc, const uint8_t& _pin, const uint8_t& _activelow) {
     id = _id;
     description = _desc;
     pin = _pin;
-    activelow = _activelow
+    activelow = _activelow;
     message = MyMessage(id, V_STATUS);
   }
 
@@ -29,7 +29,7 @@ public:
       if (sensor.id == sensorId) return sensor;
     }
 
-    return CustomSensor(0, "UNKNOWN", 0);
+    return CustomSensor(0, "UNKNOWN", 0,  0);
   }
 
   uint8_t id;
