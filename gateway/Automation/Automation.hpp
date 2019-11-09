@@ -12,13 +12,19 @@
 #include "../CustomSensor/CustomSensor.hpp"
 #include "../Mapping/Mapping.hpp"
 
+void setGPIO(const uint8_t& sensorId, const uint8_t& cmd) {
+  CustomSensor sensor = CustomSensor::getSensorById(sensorId, customSensors);
+  const uint8_t state = (sensor.activelow == 1) ? !cmd : cmd;
+
+  digitalWrite(sensor.pin, state);
+}
+
 void setOutput(const uint8_t& sensorId, const uint8_t& cmd = Relay::FLIP) {
   CustomSensor sensor = CustomSensor::getSensorById(sensorId, customSensors);
   const uint8_t state = (cmd == Relay::FLIP) ? !loadState(sensor.id) : cmd;
 
   saveState(sensor.id, state);
-  digitalWrite(sensor.pin, state);
-
+  setGPIO(sensor.pin, state);
   send(sensor.message.set(state));
 }
 
