@@ -1,5 +1,5 @@
 /**
- * @file CustomSensor.h
+ * @file CustomSensor.hpp
  * @author Grzegorz Krajewski
  *
  * Representation of Custom Sensor class.

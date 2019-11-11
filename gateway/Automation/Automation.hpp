@@ -1,5 +1,5 @@
 /**
- * @file Automation.h
+ * @file Automation.hpp
  * @author Grzegorz Krajewski
  *
  * Automation for buttons & sensors.

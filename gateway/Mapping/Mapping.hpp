@@ -1,5 +1,5 @@
 /**
- * @file Mapping.h
+ * @file Mapping.hpp
  * @author Grzegorz Krajewski
  *
  * Mappings.
@@ -47,7 +47,7 @@ const uint8_t HEATING_5_ID      = 24;
 const uint8_t HEATING_6_ID      = 25;
 const uint8_t HEATING_7_ID      = 26;
 
-// Vector contaning child ID, description, output pin
+// Vector contaning child ID, description, output pin, ActiveLow as option
 std::vector<CustomSensor> customSensors = std::vector<CustomSensor>() = {
   { CustomSensor(SALOON_1_ID,       "Salon S1",       24) },
   { CustomSensor(SALOON_2_ID,       "Salon S2",       25) },
