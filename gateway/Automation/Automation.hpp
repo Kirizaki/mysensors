@@ -14,7 +14,7 @@
 
 void setGPIO(const uint8_t& sensorId, const uint8_t& cmd) {
   CustomSensor sensor = CustomSensor::getSensorById(sensorId, customSensors);
-  const uint8_t state = (sensor.activelow == 1) ? !cmd : cmd;
+  const uint8_t state = (sensor.activelow == 1) ? (1-cmd) : cmd;
 
   digitalWrite(sensor.pin, state);
 }
