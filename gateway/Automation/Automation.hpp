@@ -13,7 +13,7 @@
 #include "../Mapping/Mapping.hpp"
 
 void setGPIO(const CustomSensor sensor, const uint8_t& cmd) {
-  const uint8_t state = (sensor.activelow == 1) ? (1-cmd) : cmd;
+  const uint8_t state = (sensor.activelow) ? (1-cmd) : cmd;
 
   digitalWrite(sensor.pin, state);
 }
