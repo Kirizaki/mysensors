@@ -1,3 +1,10 @@
+# @file ccpp.yml
+# @author Grzegorz Krajewski
+#
+# Workflow file to lint-check, build and download artifacts
+#
+# @license GPL V2
+
 name: C/C++ CI
 
 on: [push]
