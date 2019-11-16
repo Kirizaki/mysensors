@@ -12,10 +12,11 @@
 #include "../CustomSensor/CustomSensor.hpp"
 #include "../Mapping/Mapping.hpp"
 
-void setGPIO(const CustomSensor sensor, const bool& cmd) {
-  const bool state = (true == sensor.activelow) ? !cmd : cmd;
+void setGPIO(const CustomSensor sensor, const uint8_t& cmd) {
+  bool bState = static_cast<bool>(cmd);
+  bState = (ActiveLow == sensor.activelow) ? !cmd : cmd;
 
-  digitalWrite(sensor.pin, state);
+  digitalWrite(sensor.pin, bState);
 }
 
 void setOutput(const uint8_t& sensorId, const uint8_t& cmd = Relay::FLIP) {
