@@ -17,7 +17,7 @@ namespace Relay {
   const uint8_t ON   = 1;
   const uint8_t FLIP = 2;
 }
-const uint8_t ActiveLow = 1;
+const bool ActiveLow = 1;
 
 // Child ID declaration of relays
 const uint8_t SALOON_1_ID       = 1;
