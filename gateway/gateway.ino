@@ -24,8 +24,7 @@
 
 void before() {
   for (const CustomSensor sensor : customSensors) {
-    const uint8_t pin = sensor.pin;
-    pinMode(pin, OUTPUT);
+    pinMode(sensor.pin, OUTPUT);
 
     uint8_t currentState = loadState(sensor.id);
     // Check whether EEPROM cell was used before
@@ -33,7 +32,7 @@ void before() {
       currentState = Relay::OFF;
       saveState(sensor.id, currentState);
     }
-    setGPIO(pin, currentState);
+    setGPIO(sensor, currentState);
   }
 }
 

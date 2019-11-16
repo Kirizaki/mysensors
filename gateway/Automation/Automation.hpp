@@ -12,8 +12,7 @@
 #include "../CustomSensor/CustomSensor.hpp"
 #include "../Mapping/Mapping.hpp"
 
-void setGPIO(const uint8_t& sensorId, const uint8_t& cmd) {
-  CustomSensor sensor = CustomSensor::getSensorById(sensorId, customSensors);
+void setGPIO(const CustomSensor sensor, const uint8_t& cmd) {
   const uint8_t state = (sensor.activelow == 1) ? (1-cmd) : cmd;
 
   digitalWrite(sensor.pin, state);
@@ -24,7 +23,7 @@ void setOutput(const uint8_t& sensorId, const uint8_t& cmd = Relay::FLIP) {
   const uint8_t state = (cmd == Relay::FLIP) ? !loadState(sensor.id) : cmd;
 
   saveState(sensor.id, state);
-  setGPIO(sensor.pin, state);
+  setGPIO(sensor, state);
   send(sensor.message.set(state));
 }
 
