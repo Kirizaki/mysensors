@@ -29,7 +29,7 @@ public:
       if (sensor.id == sensorId) return sensor;
     }
 
-    return CustomSensor(0, "UNKNOWN", 0,  0);
+    return CustomSensor(0, "UNKNOWN", 0,  false);
   }
 
   uint8_t id;
