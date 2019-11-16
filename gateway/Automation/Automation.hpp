@@ -14,7 +14,7 @@
 
 void setGPIO(const CustomSensor sensor, const uint8_t& cmd) {
   bool bState = static_cast<bool>(cmd);
-  bState = (ActiveLow == sensor.activelow) ? !cmd : cmd;
+  bState = (ActiveLow == sensor.activelow) ? !bState : bState;
 
   digitalWrite(sensor.pin, bState);
 }
