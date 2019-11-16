@@ -12,8 +12,8 @@
 #include "../CustomSensor/CustomSensor.hpp"
 #include "../Mapping/Mapping.hpp"
 
-void setGPIO(const CustomSensor sensor, const uint8_t& cmd) {
-  const uint8_t state = (sensor.activelow) ? (1-cmd) : cmd;
+void setGPIO(const CustomSensor sensor, const bool& cmd) {
+  const bool state = (true == sensor.activelow) ? !cmd : cmd;
 
   digitalWrite(sensor.pin, state);
 }
