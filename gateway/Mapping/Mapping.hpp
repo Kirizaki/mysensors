@@ -1,5 +1,5 @@
 /**
- * @file Mapping.h
+ * @file Mapping.hpp
  * @author Grzegorz Krajewski
  *
  * Mappings.
@@ -17,6 +17,7 @@ namespace Relay {
   const uint8_t ON   = 1;
   const uint8_t FLIP = 2;
 }
+const bool ActiveLow = true;
 
 // Child ID declaration of relays
 const uint8_t SALOON_1_ID       = 1;
@@ -46,7 +47,7 @@ const uint8_t HEATING_5_ID      = 24;
 const uint8_t HEATING_6_ID      = 25;
 const uint8_t HEATING_7_ID      = 26;
 
-// Vector contaning child ID, description, output pin
+// Vector contaning child ID, description, output pin, ActiveLow as option
 std::vector<CustomSensor> customSensors = std::vector<CustomSensor>() = {
   { CustomSensor(SALOON_1_ID,       "Salon S1",       24) },
   { CustomSensor(SALOON_2_ID,       "Salon S2",       25) },
@@ -66,14 +67,14 @@ std::vector<CustomSensor> customSensors = std::vector<CustomSensor>() = {
   { CustomSensor(KITCHEN_TABLE_ID,  "Kuchnia stolik", 39) },
   { CustomSensor(WORKSHOP_ID,       "Warsztat",       40) },
   { CustomSensor(CORRIDOR_ID,       "Korytarz",       41) },
-  { CustomSensor(PUMP_ID,           "Pompa",          42) },
-  { CustomSensor(HEATING_1_ID,      "Strefa 1",       43) },
-  { CustomSensor(HEATING_2_ID,      "Strefa 2",       44) },
-  { CustomSensor(HEATING_3_ID,      "Strefa 3",       45) },
-  { CustomSensor(HEATING_4_ID,      "Strefa 4",       46) },
-  { CustomSensor(HEATING_5_ID,      "Strefa 5",       47) },
-  { CustomSensor(HEATING_6_ID,      "Strefa 6",       48) },
-  { CustomSensor(HEATING_7_ID,      "Strefa 7",       49) },
+  { CustomSensor(PUMP_ID,           "Pompa",          42, ActiveLow) },
+  { CustomSensor(HEATING_1_ID,      "Strefa 1",       43, ActiveLow) },
+  { CustomSensor(HEATING_2_ID,      "Strefa 2",       44, ActiveLow) },
+  { CustomSensor(HEATING_3_ID,      "Strefa 3",       45, ActiveLow) },
+  { CustomSensor(HEATING_4_ID,      "Strefa 4",       46, ActiveLow) },
+  { CustomSensor(HEATING_5_ID,      "Strefa 5",       47, ActiveLow) },
+  { CustomSensor(HEATING_6_ID,      "Strefa 6",       48, ActiveLow) },
+  { CustomSensor(HEATING_7_ID,      "Strefa 7",       49, ActiveLow) },
 };
 
 // Pushbuttons declaration

@@ -22,11 +22,9 @@
 #include "./Mapping/Mapping.hpp"
 #include "./Automation/Automation.hpp"
 
-// TODO: Replace duplication of 'saveState' and 'digitalWrite' with 'setOutput'
 void before() {
   for (const CustomSensor sensor : customSensors) {
-    const uint8_t pin = sensor.pin;
-    pinMode(pin, OUTPUT);
+    pinMode(sensor.pin, OUTPUT);
 
     uint8_t currentState = loadState(sensor.id);
     // Check whether EEPROM cell was used before
@@ -34,7 +32,7 @@ void before() {
       currentState = Relay::OFF;
       saveState(sensor.id, currentState);
     }
-    digitalWrite(pin, currentState);
+    setGPIO(sensor, currentState);
   }
 }
 
@@ -45,7 +43,7 @@ void setup() {
 void presentation()
 {
   // Send the sketch version information to the gateway and Controller
-  sendSketchInfo("Gateway", "1.0");
+  sendSketchInfo("Gateway", "1.4");
 
   // Send actual states
   for (CustomSensor sensor : customSensors) {
