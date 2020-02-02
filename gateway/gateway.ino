@@ -16,23 +16,23 @@
 #endif
 
 // Remember to add library to Arduino path
-#include <ArduinoSTL.h>
 #include <MySensors.h>
-#include "./CustomSensor/CustomSensor.hpp"
 #include "./Mapping/Mapping.hpp"
 #include "./Automation/Automation.hpp"
 
 void before() {
-  for (const CustomSensor sensor : customSensors) {
-    pinMode(sensor.pin, OUTPUT);
+  for(uint8_t i = 0; i < maxSensors; i++) {
+    pinMode(Sensors[i].id, OUTPUT);
+    msgs[i] = MyMessage(Sensors[i].id, V_LIGHT);
+    uint8_t currentState = loadState(Sensors[i].id);
 
-    uint8_t currentState = loadState(sensor.id);
     // Check whether EEPROM cell was used before
-    if (currentState == 0xFF) {
+    if (currentState != 0|1) {
       currentState = Relay::OFF;
-      saveState(sensor.id, currentState);
+      saveState(Sensors[i].id, currentState);
     }
-    setGPIO(sensor, currentState);
+
+    setGPIO(Sensors[i].pin, currentState);
   }
 }
 
@@ -43,13 +43,13 @@ void setup() {
 void presentation()
 {
   // Send the sketch version information to the gateway and Controller
-  sendSketchInfo("Gateway", "1.4");
+  sendSketchInfo("Gateway", "1.5");
 
   // Send actual states
-  for (CustomSensor sensor : customSensors) {
-    const uint8_t id = sensor.id;
-    present(id, S_BINARY, sensor.description);
-    send(sensor.message.set(loadState(id)));
+  for (uint8_t i = 0; i < maxSensors; i++) {
+    const uint8_t id = Sensors[i].id;
+    present(id, S_BINARY, Sensors[i].description);
+    send(msgs[i].set(loadState(id)));
   }
 }
 
@@ -72,9 +72,10 @@ void loop() {
 void receive(const MyMessage &message) {
   // We only expect one type of message from controller. But we better check anyway.
   if (message.type==V_STATUS) {
-    CustomSensor sensor = CustomSensor::getSensorById(message.sensor, customSensors);
+
+    uint8_t Id = getId(message.sensor);
     const bool value = message.getBool();
     // Store state in eeprom and send message
-    setOutput(sensor.id, value);
+    setOutput(Sensors[Id].id, value);
   }
 }

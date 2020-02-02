@@ -10,7 +10,6 @@
 #pragma once
 
 #include <OneButton.h>
-#include "../CustomSensor/CustomSensor.hpp"
 
 namespace Relay {
   const uint8_t OFF  = 0;
@@ -38,7 +37,6 @@ const uint8_t KITCHEN_2_ID      = 15;
 const uint8_t KITCHEN_TABLE_ID  = 16;
 const uint8_t WORKSHOP_ID       = 17;
 const uint8_t CORRIDOR_ID       = 18;
-const uint8_t PUMP_ID           = 19;
 const uint8_t HEATING_1_ID      = 20;
 const uint8_t HEATING_2_ID      = 21;
 const uint8_t HEATING_3_ID      = 22;
@@ -47,35 +45,49 @@ const uint8_t HEATING_5_ID      = 24;
 const uint8_t HEATING_6_ID      = 25;
 const uint8_t HEATING_7_ID      = 26;
 
-// Vector contaning child ID, description, output pin, ActiveLow as option
-std::vector<CustomSensor> customSensors = std::vector<CustomSensor>() = {
-  { CustomSensor(SALOON_1_ID,       "Salon S1",       24) },
-  { CustomSensor(SALOON_2_ID,       "Salon S2",       25) },
-  { CustomSensor(SALOON_3_ID,       "Salon Lampka",   26) },
-  { CustomSensor(GAMING_ROOM_1_ID,  "Gralnia S1",     27) },
-  { CustomSensor(GAMING_ROOM_2_ID,  "Gralnia S2",     28) },
-  { CustomSensor(BEDROOM_ID,        "Sypialnia",      29) },
-  { CustomSensor(BED_1_ID,          "Lozko 1",        30) },
-  { CustomSensor(BED_2_ID,          "Lozko 2",        31) },
-  { CustomSensor(GUESTS_ID,         "Goscinny",       32) },
-  { CustomSensor(BATHROOM_1_ID,     "Lazienka",       33) },
-  { CustomSensor(BATHROOM_2_ID,     "Prysznic",       34) },
-  { CustomSensor(MIRROR_ID,         "Lustro",         35) },
-  { CustomSensor(FAN_ID,            "Wentylator",     36) },
-  { CustomSensor(KITCHEN_1_ID,      "Kuchnia",        37) },
-  { CustomSensor(KITCHEN_2_ID,      "Kuchnia ledy",   38) },
-  { CustomSensor(KITCHEN_TABLE_ID,  "Kuchnia stolik", 39) },
-  { CustomSensor(WORKSHOP_ID,       "Warsztat",       40) },
-  { CustomSensor(CORRIDOR_ID,       "Korytarz",       41) },
-  { CustomSensor(PUMP_ID,           "Pompa",          42, ActiveLow) },
-  { CustomSensor(HEATING_1_ID,      "Strefa 1",       43, ActiveLow) },
-  { CustomSensor(HEATING_2_ID,      "Strefa 2",       44, ActiveLow) },
-  { CustomSensor(HEATING_3_ID,      "Strefa 3",       45, ActiveLow) },
-  { CustomSensor(HEATING_4_ID,      "Strefa 4",       46, ActiveLow) },
-  { CustomSensor(HEATING_5_ID,      "Strefa 5",       47, ActiveLow) },
-  { CustomSensor(HEATING_6_ID,      "Strefa 6",       48, ActiveLow) },
-  { CustomSensor(HEATING_7_ID,      "Strefa 7",       49, ActiveLow) },
+typedef struct {
+  const uint8_t id;
+  const char* description;
+  const uint8_t pin;
+  bool activelow;
+} SensorsStruct;
+
+SensorsStruct Sensors [] = {
+  { SALOON_1_ID,       "Salon S1",       24, false },
+  { SALOON_2_ID,       "Salon S2",       25, false },
+  { SALOON_3_ID,       "Salon Lampka",   26, false },
+  { GAMING_ROOM_1_ID,  "Gralnia S1",     27, false },
+  { GAMING_ROOM_2_ID,  "Gralnia S2",     28, false },
+  { BEDROOM_ID,        "Sypialnia",      29, false },
+  { BED_1_ID,          "Lozko 1",        30, false },
+  { BED_2_ID,          "Lozko 2",        31, false },
+  { GUESTS_ID,         "Goscinny",       32, false },
+  { BATHROOM_1_ID,     "Lazienka",       33, false },
+  { BATHROOM_2_ID,     "Prysznic",       34, false },
+  { MIRROR_ID,         "Lustro",         35, false },
+  { FAN_ID,            "Wentylator",     36, false },
+  { KITCHEN_1_ID,      "Kuchnia",        37, false },
+  { KITCHEN_2_ID,      "Kuchnia ledy",   38, false },
+  { KITCHEN_TABLE_ID,  "Kuchnia stolik", 39, false },
+  { WORKSHOP_ID,       "Warsztat",       40, false },
+  { CORRIDOR_ID,       "Korytarz",       41, false },
+  { HEATING_1_ID,      "Strefa 1",       43, ActiveLow },
+  { HEATING_2_ID,      "Strefa 2",       44, ActiveLow },
+  { HEATING_3_ID,      "Strefa 3",       45, ActiveLow },
+  { HEATING_4_ID,      "Strefa 4",       46, ActiveLow },
+  { HEATING_5_ID,      "Strefa 5",       47, ActiveLow },
+  { HEATING_6_ID,      "Strefa 6",       48, ActiveLow },
+  { HEATING_7_ID,      "Strefa 7",       49, ActiveLow },
 };
+const int maxSensors = sizeof(Sensors) / sizeof(SensorsStruct);
+MyMessage msgs[maxSensors];
+
+uint8_t getId(uint8_t sensorId) {
+  for (uint8_t i = 0; i < maxSensors; i++) {
+    if (Sensors[i].id == sensorId) return(i);
+  }
+  return(-1);
+}
 
 // Pushbuttons declaration
 // Remember that names should be consistent with main loop in gateway.ino

@@ -9,23 +9,22 @@
 
 #pragma once
 
-#include "../CustomSensor/CustomSensor.hpp"
 #include "../Mapping/Mapping.hpp"
 
-void setGPIO(const CustomSensor sensor, const uint8_t& cmd) {
+void setGPIO(const uint8_t& sensorId, const uint8_t& cmd) {
   bool bState = static_cast<bool>(cmd);
-  bState = (ActiveLow == sensor.activelow) ? !bState : bState;
+  bState = (ActiveLow == Sensors[sensorId].activelow) ? !bState : bState;
 
-  digitalWrite(sensor.pin, bState);
+  digitalWrite(Sensors[sensorId].pin, bState);
 }
 
 void setOutput(const uint8_t& sensorId, const uint8_t& cmd = Relay::FLIP) {
-  CustomSensor sensor = CustomSensor::getSensorById(sensorId, customSensors);
-  const uint8_t state = (cmd == Relay::FLIP) ? !loadState(sensor.id) : cmd;
+  uint8_t ID = getId(sensorId);
+  const uint8_t state = (cmd == Relay::FLIP) ? !loadState(Sensors[ID].id) : cmd;
 
-  saveState(sensor.id, state);
-  setGPIO(sensor, state);
-  send(sensor.message.set(state));
+  saveState(Sensors[ID].id, state);
+  setGPIO(Sensors[ID].pin, state);
+  send(msgs[ID].set(state));
 }
 
 void saloonClick() {
