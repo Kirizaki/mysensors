@@ -19,12 +19,12 @@ void setGPIO(const uint8_t& sensorId, const uint8_t& cmd) {
 }
 
 void setOutput(const uint8_t& sensorId, const uint8_t& cmd = Relay::FLIP) {
-  uint8_t ID = getId(sensorId);
-  const uint8_t state = (cmd == Relay::FLIP) ? !loadState(Sensors[ID].id) : cmd;
+  uint8_t Id = getId(sensorId);
+  const uint8_t state = (cmd == Relay::FLIP) ? !loadState(Sensors[Id].id) : cmd;
 
-  saveState(Sensors[ID].id, state);
-  setGPIO(Sensors[ID].pin, state);
-  send(msgs[ID].set(state));
+  saveState(Sensors[Id].id, state);
+  setGPIO(Sensors[Id].pin, state);
+  send(msgs[Id].set(state));
 }
 
 void saloonClick() {
@@ -66,7 +66,6 @@ void kitchenOff() {
   setOutput(KITCHEN_2_ID, Relay::OFF);
   setOutput(KITCHEN_TABLE_ID, Relay::OFF);
 }
-
 
 void setupButtons() {
   // Setup the button.

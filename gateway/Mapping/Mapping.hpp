@@ -53,6 +53,7 @@ typedef struct {
 } SensorsStruct;
 
 SensorsStruct Sensors [] = {
+//  Child ID           description       pin activelow
   { SALOON_1_ID,       "Salon S1",       24, false },
   { SALOON_2_ID,       "Salon S2",       25, false },
   { SALOON_3_ID,       "Salon Lampka",   26, false },
