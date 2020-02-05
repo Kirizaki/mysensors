@@ -22,7 +22,7 @@
 
 void before() {
   for(uint8_t i = 0; i < maxSensors; i++) {
-    pinMode(Sensors[i].id, OUTPUT);
+    pinMode(Sensors[i].pin, OUTPUT);
     msgs[i] = MyMessage(Sensors[i].id, V_STATUS);
     uint8_t currentState = loadState(Sensors[i].id);
 
@@ -32,7 +32,7 @@ void before() {
       saveState(Sensors[i].id, currentState);
     }
 
-    setGPIO(Sensors[i].pin, currentState);
+    setGPIO(i, currentState);
   }
 }
 

@@ -23,7 +23,7 @@ void setOutput(const uint8_t& sensorId, const uint8_t& cmd = Relay::FLIP) {
   const uint8_t state = (cmd == Relay::FLIP) ? !loadState(Sensors[Id].id) : cmd;
 
   saveState(Sensors[Id].id, state);
-  setGPIO(Sensors[Id].pin, state);
+  setGPIO(Id, state);
   send(msgs[Id].set(state));
 }
 
