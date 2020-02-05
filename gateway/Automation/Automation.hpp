@@ -27,6 +27,11 @@ void setOutput(const uint8_t& sensorId, const uint8_t& cmd = Relay::FLIP) {
   send(msgs[ID].set(state));
 }
 
+void clickCallback(void* pSensorId) {
+  const uint8_t sensorId = static_cast<uint8_t>(reinterpret_cast<intptr_t>(pSensorId));
+  setOutput(sensorId);
+}
+
 void saloonClick() {
   setOutput(SALOON_1_ID);
   setOutput(SALOON_2_ID);
@@ -72,37 +77,48 @@ void setupButtons() {
   // Setup the button.
   saloon.attachClick(saloonClick);
   saloon.attachLongPressStop(saloonOff);
-  saloon.attachDoubleClick(setOutput, SALOON_2_ID);
+  uint8_t saloon2id = SALOON_2_ID;
+  saloon.attachDoubleClick(clickCallback, &saloon2id);
 
   gamingRoom.attachClick(gamingRoomClick);
   gamingRoom.attachLongPressStop(gamingRoomOff);
-  gamingRoom.attachDoubleClick(setOutput, GAMING_ROOM_1_ID);
+  uint8_t gamingRoom1id = GAMING_ROOM_1_ID;
+  gamingRoom.attachDoubleClick(clickCallback, &gamingRoom1id);
 
-  bedroom.attachClick(setOutput, BEDROOM_ID);
+  uint8_t bedroomId = BEDROOM_ID;
+  bedroom.attachClick(clickCallback, &bedroomId);
   bedroom.attachLongPressStop(bedroomOff);
 
-  bed1.attachClick(setOutput, BED_1_ID);
+  uint8_t bed1id = BED_1_ID;
+  bed1.attachClick(clickCallback, &bed1id);
   bed1.attachLongPressStop(bedroomOff);
-  bed1.attachDoubleClick(setOutput, BED_2_ID);
+  uint8_t bed2id = BED_2_ID;
+  bed1.attachDoubleClick(clickCallback, &bed2id);
 
-  bed2.attachClick(setOutput, BED_2_ID);
+  bed2.attachClick(clickCallback, &bed2id);
   bed2.attachLongPressStop(bedroomOff);
-  bed2.attachDoubleClick(setOutput, BED_1_ID);
+  bed2.attachDoubleClick(clickCallback, &bed1id);
 
-  guests.attachClick(setOutput, GUESTS_ID);
+  uint8_t guestsId = GUESTS_ID;
+  guests.attachClick(clickCallback, &guestsId);
 
   bathroom.attachClick(bathroomClick);
   bathroom.attachLongPressStop(bathroomOff);
 
-  mirror.attachClick(setOutput, MIRROR_ID);
+  uint8_t mirrorId = MIRROR_ID;
+  mirror.attachClick(clickCallback, &mirrorId);
 
   kitchen.attachClick(kitchenClick);
   kitchen.attachLongPressStop(kitchenOff);
-  kitchen.attachDoubleClick(setOutput, KITCHEN_2_ID);
+  uint8_t kitchen2id = KITCHEN_2_ID;
+  kitchen.attachDoubleClick(clickCallback, &kitchen2id);
 
-  kitchenTable.attachClick(setOutput, KITCHEN_TABLE_ID);
+  uint8_t kitchenTableId = KITCHEN_TABLE_ID;
+  kitchenTable.attachClick(clickCallback, &kitchenTableId);
 
-  workshop.attachClick(setOutput, WORKSHOP_ID);
+  uint8_t workshopId = WORKSHOP_ID;
+  workshop.attachClick(clickCallback, &workshopId);
 
-  corridor.attachClick(setOutput, CORRIDOR_ID);
+  uint8_t corridorId = CORRIDOR_ID;
+  corridor.attachClick(clickCallback, &corridorId);
 }
