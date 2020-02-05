@@ -52,6 +52,7 @@ typedef struct {
   bool activelow;
 } SensorsStruct;
 
+// TODO: Move to separate file
 SensorsStruct Sensors [] = {
   { SALOON_1_ID,       "Salon S1",       24, false },
   { SALOON_2_ID,       "Salon S2",       25, false },
