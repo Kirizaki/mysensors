@@ -28,6 +28,7 @@ void setOutput(const uint8_t& sensorId, const uint8_t& cmd = Relay::FLIP) {
 }
 
 void clickCallback(void* pSensorId) {
+  // TODO: Test whether this can be null or nullptr or unexpected value
   const uint8_t sensorId = static_cast<uint8_t>(reinterpret_cast<intptr_t>(pSensorId));
   setOutput(sensorId);
 }
