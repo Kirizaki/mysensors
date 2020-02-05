@@ -79,7 +79,7 @@ SensorsStruct Sensors [] = {
   { HEATING_6_ID,      "Strefa 6",       48, ActiveLow },
   { HEATING_7_ID,      "Strefa 7",       49, ActiveLow },
 };
-const int maxSensors = sizeof(Sensors) / sizeof(SensorsStruct);
+const uint8_t maxSensors = sizeof(Sensors) / sizeof(SensorsStruct);
 MyMessage msgs[maxSensors];
 
 uint8_t getId(uint8_t sensorId) {

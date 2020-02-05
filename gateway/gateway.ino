@@ -23,7 +23,7 @@
 void before() {
   for(uint8_t i = 0; i < maxSensors; i++) {
     pinMode(Sensors[i].id, OUTPUT);
-    msgs[i] = MyMessage(Sensors[i].id, V_LIGHT);
+    msgs[i] = MyMessage(Sensors[i].id, V_STATUS);
     uint8_t currentState = loadState(Sensors[i].id);
 
     // Check whether EEPROM cell was used before
@@ -47,9 +47,9 @@ void presentation()
 
   // Send actual states
   for (uint8_t i = 0; i < maxSensors; i++) {
-    const uint8_t id = Sensors[i].id;
-    present(id, S_BINARY, Sensors[i].description);
-    send(msgs[i].set(loadState(id)));
+    const uint8_t Id = Sensors[i].id;
+    present(Id, S_BINARY, Sensors[i].description);
+    send(msgs[i].set(loadState(Id)));
   }
 }
 
