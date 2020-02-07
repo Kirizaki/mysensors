@@ -44,26 +44,31 @@ void gamingRoomOff() {
   setOutput(GAMING_ROOM_2_ID, Relay::OFF);
 }
 void bedroomOff() {
-  setOutput(BEDROOM_ID, Relay::OFF);
+  setOutput(BEDROOM_1_ID, Relay::OFF);
+  setOutput(BEDROOM_2_ID, Relay::OFF);
   setOutput(BED_1_ID, Relay::OFF);
   setOutput(BED_2_ID, Relay::OFF);
 }
+void bedroomClick() {
+  setOutput(BEDROOM_1_ID);
+  setOutput(BEDROOM_2_ID);
+}
 void bathroomClick() {
-  setOutput(BATHROOM_1_ID);
-  setOutput(BATHROOM_2_ID);
+  setOutput(BATHROOM_ID);
+  setOutput(BATHROOM_LED_ID);
 }
 void bathroomOff() {
-  setOutput(BATHROOM_1_ID, Relay::OFF);
-  setOutput(BATHROOM_2_ID, Relay::OFF);
+  setOutput(BATHROOM_ID, Relay::OFF);
+  setOutput(BATHROOM_LED_ID, Relay::OFF);
   setOutput(MIRROR_ID, Relay::OFF);
 }
 void kitchenClick() {
-  setOutput(KITCHEN_1_ID);
-  setOutput(KITCHEN_2_ID);
+  setOutput(KITCHEN_ID);
+  setOutput(KITCHEN_LED_ID);
 }
 void kitchenOff() {
-  setOutput(KITCHEN_1_ID, Relay::OFF);
-  setOutput(KITCHEN_2_ID, Relay::OFF);
+  setOutput(KITCHEN_ID, Relay::OFF);
+  setOutput(KITCHEN_LED_ID, Relay::OFF);
   setOutput(KITCHEN_TABLE_ID, Relay::OFF);
 }
 
@@ -77,8 +82,9 @@ void setupButtons() {
   gamingRoom.attachLongPressStop(gamingRoomOff);
   gamingRoom.attachDoubleClick(setOutput, GAMING_ROOM_1_ID);
 
-  bedroom.attachClick(setOutput, BEDROOM_ID);
+  bedroom.attachClick(bedroomClick);
   bedroom.attachLongPressStop(bedroomOff);
+  bedroom.attachDoubleClick(setOutput, BEDROOM_2_ID);
 
   bed1.attachClick(setOutput, BED_1_ID);
   bed1.attachLongPressStop(bedroomOff);
@@ -97,7 +103,7 @@ void setupButtons() {
 
   kitchen.attachClick(kitchenClick);
   kitchen.attachLongPressStop(kitchenOff);
-  kitchen.attachDoubleClick(setOutput, KITCHEN_2_ID);
+  kitchen.attachDoubleClick(setOutput, KITCHEN_LED_ID);
 
   kitchenTable.attachClick(setOutput, KITCHEN_TABLE_ID);
 
