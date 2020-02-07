@@ -27,7 +27,7 @@ void before() {
     uint8_t currentState = loadState(Sensors[i].id);
 
     // Check whether EEPROM cell was used before
-    if ((currentState != 0||1)) {
+    if (currentState != 0||1) {
       currentState = Relay::OFF;
       saveState(Sensors[i].id, currentState);
     }
