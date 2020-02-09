@@ -83,6 +83,7 @@ void receive(const MyMessage &message) {
     // check whether given sensor exists in Sensors cointainer
     const uint8_t idx = getIdx(message.sensor);
     const bool value = message.getBool();
+
     // Store state in eeprom and send message
     setOutput(Sensors[idx].id, value);
   }
