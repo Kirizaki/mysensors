@@ -11,22 +11,19 @@
 
 #include "../Mapping/Mapping.hpp"
 
-void setGPIO(const uint8_t& sensorId, const uint8_t& cmd) {
-  bool bState = static_cast<bool>(cmd);
-  bState = (ActiveLow == Sensors[sensorId].activelow) ? !bState : bState;
-
-  //simpler way of fliping 1 to 0 and 0 to 1
-  //const uint8_t State = (ActiveLow == Sensors[sensorId].activelow) ? 1 - cmd : cmd;
-  digitalWrite(Sensors[sensorId].pin, bState);
-}
-
 void setOutput(const uint8_t& sensorId, const uint8_t& cmd = Relay::FLIP) {
-  uint8_t Id = getId(sensorId);
-  const uint8_t state = (cmd == Relay::FLIP) ? !loadState(Sensors[Id].id) : cmd;
+  // test whether sensor with given ID exists and get it's index in container
+  uint8_t idx = getIdx(sensorId);
+  auto sensor = Sensors[idx];
+  // check whether flip state of sensor
+  const uint8_t state = (cmd == Relay::FLIP) ? !loadState(sensor.id) : cmd;
 
-  saveState(Sensors[Id].id, state);
-  setGPIO(Id, state);
-  send(msgs[Id].set(state));
+  saveState(sensor.id, state);
+  // inverse state if sensors is Active Low
+  const uint8_t hwState = (ActiveLow == sensor.activelow) ? 1 - cmd : cmd;
+  digitalWrite(sensor.pin, hwState);
+
+  send(msgs[idx].set(state));
 }
 
 void saloonClick() {

@@ -20,19 +20,27 @@
 #include "./Mapping/Mapping.hpp"
 #include "./Automation/Automation.hpp"
 
+// TODO: as this should be fixed, refactor to keep index fixed
+// sensor[0] -> msgs[0]
+// sensor[1] -> msgs[1]
+// etc.
 void before() {
-  for(uint8_t i = 0; i < maxSensors; i++) {
-    pinMode(Sensors[i].pin, OUTPUT);
-    msgs[i] = MyMessage(Sensors[i].id, V_STATUS);
-    uint8_t currentState = loadState(Sensors[i].id);
+  for(uint8_t idx = 0; idx < maxSensors; idx++) {
+    auto sensor = Sensors[idx];
+    pinMode(sensor.pin, OUTPUT);
+    msgs[idx] = MyMessage(sensor.id, V_STATUS);
+    uint8_t currentState = loadState(sensor.id);
 
     // Check whether EEPROM cell was used before
     if (currentState != 0||1) {
       currentState = Relay::OFF;
-      saveState(Sensors[i].id, currentState);
+      saveState(sensor.id, currentState);
     }
 
-    setGPIO(i, currentState);
+  // inverse state if sensors is Active Low
+  const uint8_t hwState = (ActiveLow == sensor.activelow) ?
+    1 - currentState : currentState;
+  digitalWrite(sensor.pin, hwState);
   }
 }
 
@@ -73,7 +81,7 @@ void receive(const MyMessage &message) {
   // We only expect one type of message from controller. But we better check anyway.
   if (message.type==V_STATUS) {
 
-    uint8_t Id = getId(message.sensor);
+    uint8_t Id = getIdx(message.sensor);
     const bool value = message.getBool();
     // Store state in eeprom and send message
     setOutput(Sensors[Id].id, value);

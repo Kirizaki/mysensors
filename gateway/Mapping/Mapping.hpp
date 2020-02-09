@@ -85,7 +85,7 @@ SensorsStruct Sensors [] = {
 const uint8_t maxSensors = sizeof(Sensors) / sizeof(SensorsStruct);
 MyMessage msgs[maxSensors];
 
-uint8_t getId(uint8_t sensorId) {
+uint8_t getIdx(uint8_t sensorId) {
   for (uint8_t i = 0; i < maxSensors; i++) {
     if (Sensors[i].id == sensorId) return(i);
   }
