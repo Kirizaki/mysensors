@@ -15,6 +15,8 @@ void setGPIO(const uint8_t& sensorId, const uint8_t& cmd) {
   bool bState = static_cast<bool>(cmd);
   bState = (ActiveLow == Sensors[sensorId].activelow) ? !bState : bState;
 
+  //simpler way of fliping 1 to 0 and 0 to 1
+  //const uint8_t State = (ActiveLow == Sensors[sensorId].activelow) ? 1 - cmd : cmd;
   digitalWrite(Sensors[sensorId].pin, bState);
 }
 
