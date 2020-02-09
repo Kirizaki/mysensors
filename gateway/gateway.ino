@@ -48,16 +48,15 @@ void setup() {
   setupButtons();
 }
 
-void presentation()
-{
+void presentation() {
   // Send the sketch version information to the gateway and Controller
   sendSketchInfo("Gateway", "1.5");
 
   // Send actual states
-  for (uint8_t i = 0; i < maxSensors; i++) {
-    const uint8_t Id = Sensors[i].id;
-    present(Id, S_BINARY, Sensors[i].description);
-    send(msgs[i].set(loadState(Id)));
+  for (uint8_t idx = 0; idx < maxSensors; idx++) {
+    auto sensor = Sensors[idx];
+    present(sensor.id, S_BINARY, sensor.description);
+    send(msgs[idx].set(loadState(sensor.id)));
   }
 }
 
@@ -81,9 +80,10 @@ void receive(const MyMessage &message) {
   // We only expect one type of message from controller. But we better check anyway.
   if (message.type==V_STATUS) {
 
-    uint8_t Id = getIdx(message.sensor);
+    // check whether given sensor exists in Sensors cointainer
+    const uint8_t idx = getIdx(message.sensor);
     const bool value = message.getBool();
     // Store state in eeprom and send message
-    setOutput(Sensors[Id].id, value);
+    setOutput(Sensors[idx].id, value);
   }
 }

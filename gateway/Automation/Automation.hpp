@@ -13,6 +13,7 @@
 
 void setOutput(const uint8_t& sensorId, const uint8_t& cmd = Relay::FLIP) {
   // test whether sensor with given ID exists and get it's index in container
+  // TODO: Add debug message when idx is wrong & in any other places where: Sensors[idx]
   uint8_t idx = getIdx(sensorId);
   auto sensor = Sensors[idx];
   // check whether flip state of sensor
