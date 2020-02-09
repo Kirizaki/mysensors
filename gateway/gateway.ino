@@ -19,16 +19,18 @@
 #include <MySensors.h>
 #include "./Mapping/Mapping.hpp"
 #include "./Automation/Automation.hpp"
+#include "./Helpers/Helpers.hpp"
+
 
 // TODO: as this should be fixed, refactor to keep index fixed
 // sensor[0] -> msgs[0]
 // sensor[1] -> msgs[1]
 // etc.
 void before() {
-  for(uint8_t idx = 0; idx < maxSensors; idx++) {
+  for(uint8_t idx = 0; idx < MAX_SENSORS; idx++) {
     auto sensor = Sensors[idx];
     pinMode(sensor.pin, OUTPUT);
-    msgs[idx] = MyMessage(sensor.id, V_STATUS);
+    Messages[idx] = MyMessage(sensor.id, V_STATUS);
     uint8_t currentState = loadState(sensor.id);
 
     // Check whether EEPROM cell was used before
@@ -53,10 +55,10 @@ void presentation() {
   sendSketchInfo("Gateway", "1.5");
 
   // Send actual states
-  for (uint8_t idx = 0; idx < maxSensors; idx++) {
+  for (uint8_t idx = 0; idx < MAX_SENSORS; idx++) {
     auto sensor = Sensors[idx];
     present(sensor.id, S_BINARY, sensor.description);
-    send(msgs[idx].set(loadState(sensor.id)));
+    send(Messages[idx].set(loadState(sensor.id)));
   }
 }
 
@@ -81,7 +83,7 @@ void receive(const MyMessage &message) {
   if (message.type==V_STATUS) {
 
     // check whether given sensor exists in Sensors cointainer
-    const uint8_t idx = getIdx(message.sensor);
+    const uint8_t idx = getSensorIdx(message.sensor);
     const bool value = message.getBool();
     // Store state in eeprom and send message
     setOutput(Sensors[idx].id, value);

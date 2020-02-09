@@ -10,13 +10,7 @@
 #pragma once
 
 #include <OneButton.h>
-
-namespace Relay {
-  const uint8_t OFF  = 0;
-  const uint8_t ON   = 1;
-  const uint8_t FLIP = 2;
-}
-const bool ActiveLow = true;
+#include "../Button/Button.hpp"
 
 // Child ID declaration of relays
 const uint8_t SALOON_1_ID       = 11;
@@ -82,15 +76,6 @@ SensorsStruct Sensors [] = {
   { HEATING_6_ID,      "Strefa 6",       46, false },
   { HEATING_7_ID,      "Strefa 7",       47, false },
 };
-const uint8_t maxSensors = sizeof(Sensors) / sizeof(SensorsStruct);
-MyMessage msgs[maxSensors];
-
-uint8_t getIdx(uint8_t sensorId) {
-  for (uint8_t i = 0; i < maxSensors; i++) {
-    if (Sensors[i].id == sensorId) return(i);
-  }
-  return(-1);
-}
 
 // Pushbuttons declaration
 // Remember that names should be consistent with main loop in gateway.ino
@@ -106,3 +91,5 @@ OneButton kitchen(A9, true);
 OneButton kitchenTable(A10, true);
 OneButton workshop(A11, true);
 OneButton corridor(A12, true);
+// Button test = Button(&saloonClick, A1, false);
+// Button test = Button(&saloonClick, &saloonDoubleClick, A1, false);
