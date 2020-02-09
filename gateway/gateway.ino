@@ -16,24 +16,31 @@
 #endif
 
 // Remember to add library to Arduino path
-#include <ArduinoSTL.h>
 #include <MySensors.h>
-#include "./CustomSensor/CustomSensor.hpp"
 #include "./Mapping/Mapping.hpp"
 #include "./Automation/Automation.hpp"
 
+// TODO: as this should be fixed, refactor to keep index fixed
+// sensor[0] -> msgs[0]
+// sensor[1] -> msgs[1]
+// etc.
 void before() {
-  for (const CustomSensor sensor : customSensors) {
-    const uint8_t pin = sensor.pin;
-    pinMode(pin, OUTPUT);
-
+  for(uint8_t idx = 0; idx < maxSensors; idx++) {
+    auto sensor = Sensors[idx];
+    pinMode(sensor.pin, OUTPUT);
+    msgs[idx] = MyMessage(sensor.id, V_STATUS);
     uint8_t currentState = loadState(sensor.id);
+
     // Check whether EEPROM cell was used before
-    if (currentState == 0xFF) {
+    if (currentState != 0||1) {
       currentState = Relay::OFF;
       saveState(sensor.id, currentState);
     }
-    digitalWrite(pin, currentState);
+
+  // inverse state if sensors is Active Low
+  const uint8_t hwState = (ActiveLow == sensor.activelow) ?
+    1 - currentState : currentState;
+  digitalWrite(sensor.pin, hwState);
   }
 }
 
@@ -41,16 +48,15 @@ void setup() {
   setupButtons();
 }
 
-void presentation()
-{
+void presentation() {
   // Send the sketch version information to the gateway and Controller
-  sendSketchInfo("Gateway", "1.0");
+  sendSketchInfo("Gateway", "1.5");
 
   // Send actual states
-  for (CustomSensor sensor : customSensors) {
-    const uint8_t id = sensor.id;
-    present(id, S_BINARY, sensor.description);
-    send(sensor.message.set(loadState(id)));
+  for (uint8_t idx = 0; idx < maxSensors; idx++) {
+    auto sensor = Sensors[idx];
+    present(sensor.id, S_BINARY, sensor.description);
+    send(msgs[idx].set(loadState(sensor.id)));
   }
 }
 
@@ -73,13 +79,12 @@ void loop() {
 void receive(const MyMessage &message) {
   // We only expect one type of message from controller. But we better check anyway.
   if (message.type==V_STATUS) {
-    CustomSensor sensor = CustomSensor::getSensorById(message.sensor, customSensors);
+
+    // check whether given sensor exists in Sensors cointainer
+    const uint8_t idx = getIdx(message.sensor);
     const bool value = message.getBool();
-    // Store state in eeprom
-    saveState(sensor.id, value);
-    // Change relay state
-    digitalWrite(sensor.pin, value);
-    // Send ACK
-    send(sensor.message.set(value));
+
+    // Store state in eeprom and send message
+    setOutput(Sensors[idx].id, value);
   }
 }

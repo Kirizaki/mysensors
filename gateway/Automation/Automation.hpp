@@ -1,5 +1,5 @@
 /**
- * @file Automation.h
+ * @file Automation.hpp
  * @author Grzegorz Krajewski
  *
  * Automation for buttons & sensors.
@@ -9,27 +9,29 @@
 
 #pragma once
 
-#include "../CustomSensor/CustomSensor.hpp"
 #include "../Mapping/Mapping.hpp"
 
 void setOutput(const uint8_t& sensorId, const uint8_t& cmd = Relay::FLIP) {
-  CustomSensor sensor = CustomSensor::getSensorById(sensorId, customSensors);
+  // test whether sensor with given ID exists and get it's index in container
+  // TODO: Add debug message when idx is wrong & in any other places where: Sensors[idx]
+  uint8_t idx = getIdx(sensorId);
+  auto sensor = Sensors[idx];
+  // check whether flip state of sensor
   const uint8_t state = (cmd == Relay::FLIP) ? !loadState(sensor.id) : cmd;
 
   saveState(sensor.id, state);
-  digitalWrite(sensor.pin, state);
+  // inverse state if sensors is Active Low
+  const uint8_t hwState = (ActiveLow == sensor.activelow) ? 1 - cmd : cmd;
+  digitalWrite(sensor.pin, hwState);
 
-  send(sensor.message.set(state));
+  send(msgs[idx].set(state));
 }
 
 void saloonClick() {
   setOutput(SALOON_1_ID);
   setOutput(SALOON_2_ID);
 }
-void saloonDoubleClick() {
-  // placeholder
-}
-void saloonLongClick() {
+void saloonOff() {
   setOutput(SALOON_1_ID, Relay::OFF);
   setOutput(SALOON_2_ID, Relay::OFF);
 }
@@ -37,102 +39,75 @@ void gamingRoomClick() {
   setOutput(GAMING_ROOM_1_ID);
   setOutput(GAMING_ROOM_2_ID);
 }
-void gamingRoomLongClick() {
+void gamingRoomOff() {
   setOutput(GAMING_ROOM_1_ID, Relay::OFF);
   setOutput(GAMING_ROOM_2_ID, Relay::OFF);
 }
-void gamingRoomDoubleClick() {
-    setOutput(GAMING_ROOM_1_ID);
-}
-void bedroomClick() {
-  setOutput(BEDROOM_ID);
-}
-void bedroomLongClick() {
-  setOutput(BEDROOM_ID, Relay::OFF);
+void bedroomOff() {
+  setOutput(BEDROOM_1_ID, Relay::OFF);
+  setOutput(BEDROOM_2_ID, Relay::OFF);
   setOutput(BED_1_ID, Relay::OFF);
   setOutput(BED_2_ID, Relay::OFF);
 }
-void bed1Click() {
-  setOutput(BED_1_ID);
-}
-void bed2Click() {
-  setOutput(BED_2_ID);
-}
-void guestsClick() {
-  setOutput(GUESTS_ID);
+void bedroomClick() {
+  setOutput(BEDROOM_1_ID);
+  setOutput(BEDROOM_2_ID);
 }
 void bathroomClick() {
-  setOutput(BATHROOM_1_ID);
-  setOutput(BATHROOM_2_ID);
+  setOutput(BATHROOM_ID);
+  setOutput(BATHROOM_LED_ID);
 }
-void bathroomLongClick() {
-  setOutput(BATHROOM_1_ID, Relay::OFF);
-  setOutput(BATHROOM_2_ID, Relay::OFF);
+void bathroomOff() {
+  setOutput(BATHROOM_ID, Relay::OFF);
+  setOutput(BATHROOM_LED_ID, Relay::OFF);
   setOutput(MIRROR_ID, Relay::OFF);
 }
-void mirrorClick() {
-  setOutput(MIRROR_ID);
-}
 void kitchenClick() {
-  setOutput(KITCHEN_1_ID);
-  setOutput(KITCHEN_2_ID);
+  setOutput(KITCHEN_ID);
+  setOutput(KITCHEN_LED_ID);
 }
-void kitchenLongClick() {
-  setOutput(KITCHEN_1_ID, Relay::OFF);
-  setOutput(KITCHEN_2_ID, Relay::OFF);
+void kitchenOff() {
+  setOutput(KITCHEN_ID, Relay::OFF);
+  setOutput(KITCHEN_LED_ID, Relay::OFF);
   setOutput(KITCHEN_TABLE_ID, Relay::OFF);
-}
-void kitchenDoubleClick() {
-  setOutput(KITCHEN_2_ID);
-}
-void kitchenTableClick() {
-  setOutput(KITCHEN_TABLE_ID);
-}
-void workshopClick() {
-  setOutput(WORKSHOP_ID);
-}
-void corridorClick() {
-  setOutput(CORRIDOR_ID);
 }
 
 void setupButtons() {
   // Setup the button.
   saloon.attachClick(saloonClick);
-  saloon.attachLongPressStop(saloonLongClick);
-  saloon.attachDoubleClick(saloonDoubleClick);
+  saloon.attachLongPressStop(saloonOff);
+  saloon.attachDoubleClick(setOutput, SALOON_2_ID);
 
   gamingRoom.attachClick(gamingRoomClick);
-  gamingRoom.attachLongPressStop(gamingRoomLongClick);
-  gamingRoom.attachDoubleClick(gamingRoomDoubleClick);
+  gamingRoom.attachLongPressStop(gamingRoomOff);
+  gamingRoom.attachDoubleClick(setOutput, GAMING_ROOM_1_ID);
 
   bedroom.attachClick(bedroomClick);
-  bedroom.attachLongPressStop(bedroomLongClick);
-  // bedroom.attachDoubleClick(bedroomDoubleClick); ??
+  bedroom.attachLongPressStop(bedroomOff);
+  bedroom.attachDoubleClick(setOutput, BEDROOM_2_ID);
 
-  bed1.attachClick(bed1Click);
-  bed1.attachLongPressStop(bedroomLongClick);
-  bed1.attachDoubleClick(bed2Click);
+  bed1.attachClick(setOutput, BED_1_ID);
+  bed1.attachLongPressStop(bedroomOff);
+  bed1.attachDoubleClick(setOutput, BED_2_ID);
 
-  bed2.attachClick(bed2Click);
-  bed2.attachLongPressStop(bedroomLongClick);
-  bed2.attachDoubleClick(bed1Click);
+  bed2.attachClick(setOutput, BED_2_ID);
+  bed2.attachLongPressStop(bedroomOff);
+  bed2.attachDoubleClick(setOutput, BED_1_ID);
 
-  guests.attachClick(guestsClick);
+  guests.attachClick(setOutput, GUESTS_ID);
 
   bathroom.attachClick(bathroomClick);
-  bathroom.attachLongPressStop(bathroomLongClick);
-  // bathroom.attachDoubleClick(bathroomDoubleClick); ??
+  bathroom.attachLongPressStop(bathroomOff);
 
-  mirror.attachClick(mirrorClick);
+  mirror.attachClick(setOutput, MIRROR_ID);
 
   kitchen.attachClick(kitchenClick);
-  kitchen.attachLongPressStop(kitchenLongClick);
-  kitchen.attachDoubleClick(kitchenDoubleClick);
+  kitchen.attachLongPressStop(kitchenOff);
+  kitchen.attachDoubleClick(setOutput, KITCHEN_LED_ID);
 
-  kitchenTable.attachClick(kitchenTableClick);
+  kitchenTable.attachClick(setOutput, KITCHEN_TABLE_ID);
 
-  workshop.attachClick(workshopClick);
+  workshop.attachClick(setOutput, WORKSHOP_ID);
 
-  corridor.attachClick(corridorClick);
-  // corridor.attachDuringLongPress(corridorDuringLongClick); ??
+  corridor.attachClick(setOutput, CORRIDOR_ID);
 }

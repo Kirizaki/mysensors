@@ -13,9 +13,8 @@ At this point sketch is done for only ON/OFF status of relays.
 
 ## Dependencies
 
-1. MySensors
-2. OneButton
-3. ArduinoSTL
+1. MySensors (2.3.2)
+2. OneButton (1.4.0)
 
 **Note**: All above must be installed via Arduino IDE
 
