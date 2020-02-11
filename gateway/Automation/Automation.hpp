@@ -16,15 +16,23 @@ void setOutput(const uint8_t& sensorId, const uint8_t& cmd = Relay::FLIP) {
   // TODO: Add debug message when idx is wrong & in any other places where: Sensors[idx]
   uint8_t idx = getIdx(sensorId);
   auto sensor = Sensors[idx];
+
   // check whether flip state of sensor
   const uint8_t state = (cmd == Relay::FLIP) ? !loadState(sensor.id) : cmd;
-
   saveState(sensor.id, state);
-  // inverse state if sensors is Active Low
-  const uint8_t hwState = (ActiveLow == sensor.activelow) ? 1 - cmd : cmd;
-  digitalWrite(sensor.pin, hwState);
 
+  // inverse state if sensors is Active Low
+  bool bState = static_cast<bool>(state);
+  bState = (ActiveLow == sensor.activelow) ? !bState : bState;
+
+  digitalWrite(sensor.pin, bState);
   send(msgs[idx].set(state));
+}
+
+void clickCallback(void* pSensorId) {
+  // TODO: Test whether this can be null or nullptr or unexpected value
+  const uint8_t sensorId = static_cast<uint8_t>(reinterpret_cast<intptr_t>(pSensorId));
+  setOutput(sensorId);
 }
 
 void saloonClick() {
@@ -76,38 +84,38 @@ void setupButtons() {
   // Setup the button.
   saloon.attachClick(saloonClick);
   saloon.attachLongPressStop(saloonOff);
-  saloon.attachDoubleClick(setOutput, SALOON_2_ID);
+  saloon.attachDoubleClick(clickCallback, SALOON_2_ID);
 
   gamingRoom.attachClick(gamingRoomClick);
   gamingRoom.attachLongPressStop(gamingRoomOff);
-  gamingRoom.attachDoubleClick(setOutput, GAMING_ROOM_1_ID);
+  gamingRoom.attachDoubleClick(clickCallback, GAMING_ROOM_1_ID);
 
   bedroom.attachClick(bedroomClick);
   bedroom.attachLongPressStop(bedroomOff);
-  bedroom.attachDoubleClick(setOutput, BEDROOM_2_ID);
+  bedroom.attachDoubleClick(clickCallback, BEDROOM_2_ID);
 
-  bed1.attachClick(setOutput, BED_1_ID);
+  bed1.attachClick(clickCallback, BED_1_ID);
   bed1.attachLongPressStop(bedroomOff);
-  bed1.attachDoubleClick(setOutput, BED_2_ID);
+  bed1.attachDoubleClick(clickCallback, BED_2_ID);
 
-  bed2.attachClick(setOutput, BED_2_ID);
+  bed2.attachClick(clickCallback, BED_2_ID);
   bed2.attachLongPressStop(bedroomOff);
-  bed2.attachDoubleClick(setOutput, BED_1_ID);
+  bed2.attachDoubleClick(clickCallback, BED_1_ID);
 
-  guests.attachClick(setOutput, GUESTS_ID);
+  guests.attachClick(clickCallback, GUESTS_ID);
 
   bathroom.attachClick(bathroomClick);
   bathroom.attachLongPressStop(bathroomOff);
 
-  mirror.attachClick(setOutput, MIRROR_ID);
+  mirror.attachClick(clickCallback, MIRROR_ID);
 
   kitchen.attachClick(kitchenClick);
   kitchen.attachLongPressStop(kitchenOff);
-  kitchen.attachDoubleClick(setOutput, KITCHEN_LED_ID);
+  kitchen.attachDoubleClick(clickCallback, KITCHEN_LED_ID);
 
-  kitchenTable.attachClick(setOutput, KITCHEN_TABLE_ID);
+  kitchenTable.attachClick(clickCallback, KITCHEN_TABLE_ID);
 
-  workshop.attachClick(setOutput, WORKSHOP_ID);
+  workshop.attachClick(clickCallback, WORKSHOP_ID);
 
-  corridor.attachClick(setOutput, CORRIDOR_ID);
+  corridor.attachClick(clickCallback, CORRIDOR_ID);
 }
