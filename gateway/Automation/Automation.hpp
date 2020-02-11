@@ -17,12 +17,22 @@ void setOutput(const uint8_t& sensorId, const uint8_t& cmd = Relay::FLIP) {
   uint8_t idx = getIdx(sensorId);
   auto sensor = Sensors[idx];
   // check whether flip state of sensor
+
   const uint8_t state = (cmd == Relay::FLIP) ? !loadState(sensor.id) : cmd;
 
   saveState(sensor.id, state);
   // inverse state if sensors is Active Low
-  const uint8_t hwState = (ActiveLow == sensor.activelow) ? 1 - cmd : cmd;
-  digitalWrite(sensor.pin, hwState);
+  //const uint8_t hwState = (ActiveLow == sensor.activelow) ? 1 - cmd : cmd;
+
+  bool bState = static_cast<bool>(state);
+  bState = (ActiveLow == sensor.activelow) ? !bState : bState;
+
+  //simpler way of fliping 1 to 0 and 0 to 1
+  //const uint8_t State = (ActiveLow == Sensors[sensorId].activelow) ? 1 - cmd : cmd;
+  digitalWrite(sensor.pin, bState);
+
+
+  //digitalWrite(sensor.pin, hwState);
 
   send(msgs[idx].set(state));
 }

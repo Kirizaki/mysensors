@@ -32,15 +32,17 @@ void setup() {
     uint8_t currentState = loadState(sensor.id);
 
     // Check whether EEPROM cell was used before
-    if (currentState != 0||1) {
+    if (!(currentState == 0 || 1)) {
       currentState = Relay::OFF;
       saveState(sensor.id, currentState);
     }
 
     // inverse state if sensors is Active Low
-    const uint8_t hwState = (ActiveLow == sensor.activelow) ?
-      1 - currentState : currentState;
-    digitalWrite(sensor.pin, hwState);
+    bool bState = static_cast<bool>(currentState);
+    bState = (ActiveLow == sensor.activelow) ? !bState : bState;
+    //const uint8_t hwState = (ActiveLow == sensor.activelow) ?
+    //  1 - currentState : currentState;
+    digitalWrite(sensor.pin, bState);
   }
   setupButtons();
 }
