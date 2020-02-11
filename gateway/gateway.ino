@@ -40,8 +40,6 @@ void setup() {
     // inverse state if sensors is Active Low
     bool bState = static_cast<bool>(currentState);
     bState = (ActiveLow == sensor.activelow) ? !bState : bState;
-    //const uint8_t hwState = (ActiveLow == sensor.activelow) ?
-    //  1 - currentState : currentState;
     digitalWrite(sensor.pin, bState);
   }
   setupButtons();
