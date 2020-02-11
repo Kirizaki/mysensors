@@ -24,7 +24,7 @@
 // sensor[0] -> msgs[0]
 // sensor[1] -> msgs[1]
 // etc.
-void before() {
+void setup() {
   for(uint8_t idx = 0; idx < maxSensors; idx++) {
     auto sensor = Sensors[idx];
     pinMode(sensor.pin, OUTPUT);
@@ -32,19 +32,16 @@ void before() {
     uint8_t currentState = loadState(sensor.id);
 
     // Check whether EEPROM cell was used before
-    if (currentState != 0||1) {
+    if (!(currentState == 0 || 1)) {
       currentState = Relay::OFF;
       saveState(sensor.id, currentState);
     }
 
-  // inverse state if sensors is Active Low
-  const uint8_t hwState = (ActiveLow == sensor.activelow) ?
-    1 - currentState : currentState;
-  digitalWrite(sensor.pin, hwState);
+    // inverse state if sensors is Active Low
+    bool bState = static_cast<bool>(currentState);
+    bState = (ActiveLow == sensor.activelow) ? !bState : bState;
+    digitalWrite(sensor.pin, bState);
   }
-}
-
-void setup() {
   setupButtons();
 }
 
