@@ -34,8 +34,9 @@ const uint8_t BATHROOM_LED_ID   = 52;
 const uint8_t MIRROR_ID         = 53;
 const uint8_t FAN_ID            = 54;
 const uint8_t KITCHEN_ID        = 61;
-const uint8_t KITCHEN_LED_ID    = 62;
-const uint8_t KITCHEN_TABLE_ID  = 63;
+const uint8_t KITCHEN_LED1_ID   = 62;
+const uint8_t KITCHEN_LED2_ID   = 63;
+const uint8_t KITCHEN_TABLE_ID  = 64;
 const uint8_t WORKSHOP_ID       = 71;
 const uint8_t CORRIDOR_ID       = 81;
 const uint8_t HEATING_1_ID      = 10;
@@ -55,25 +56,26 @@ typedef struct {
 
 SensorsStruct Sensors [] = {
 //  Child ID           description       pin activelow
-  { SALOON_1_ID,       "Salon S1",       20, false },
-  { SALOON_2_ID,       "Salon S2",       21, false },
-  { SALOON_SHELF_ID,   "Salon Połka",    22, false },
-  { GAMING_ROOM_1_ID,  "Gralnia S1",     23, false },
-  { GAMING_ROOM_2_ID,  "Gralnia S2",     24, false },
-  { BEDROOM_1_ID,      "Sypialnia S1",   25, false },
-  { BEDROOM_2_ID,      "Sypialnia S2",   26, false },
-  { BED_1_ID,          "łóżko 1",        27, false },
-  { BED_2_ID,          "łóżko 2",        28, false },
-  { GUESTS_ID,         "Gościnny",       29, false },
-  { BATHROOM_ID,       "łazienka",       30, false },
-  { BATHROOM_LED_ID,   "Prysznic",       31, false },
-  { MIRROR_ID,         "Lustro",         32, false },
-  { FAN_ID,            "Wentylator",     33, false },
-  { KITCHEN_ID,        "Kuchnia",        34, false },
-  { KITCHEN_LED_ID,    "Kuchnia ledy",   35, false },
-  { KITCHEN_TABLE_ID,  "Kuchnia stolik", 36, false },
-  { WORKSHOP_ID,       "Warsztat",       37, false },
-  { CORRIDOR_ID,       "Korytarz",       38, false },
+  { SALOON_1_ID,       "Salon S1",       14, false },
+  { SALOON_2_ID,       "Salon S2",       15, false },
+  { SALOON_SHELF_ID,   "Salon Połka",    16, false },
+  { GAMING_ROOM_1_ID,  "Gralnia S1",     17, false },
+  { GAMING_ROOM_2_ID,  "Gralnia S2",     18, false },
+  { BEDROOM_1_ID,      "Sypialnia S1",   19, false },
+  { BEDROOM_2_ID,      "Sypialnia S2",   22, false },
+  { BED_1_ID,          "łóżko 1",        23, false },
+  { BED_2_ID,          "łóżko 2",        26, false },
+  { GUESTS_ID,         "Gościnny",       27, false },
+  { BATHROOM_ID,       "łazienka",       28, false },
+  { BATHROOM_LED_ID,   "Prysznic",       29, false },
+  { MIRROR_ID,         "Lustro",         30, false },
+  { FAN_ID,            "Wentylator",     31, false },
+  { KITCHEN_ID,        "Kuchnia",        32, false },
+  { KITCHEN_LED1_ID,   "Kuchnia blat",   33, false },
+  { KITCHEN_LED2_ID,   "Kuchnia deko",   34, false },
+  { KITCHEN_TABLE_ID,  "Kuchnia stolik", 35, false },
+  { WORKSHOP_ID,       "Warsztat",       36, false },
+  { CORRIDOR_ID,       "Korytarz",       37, false },
   { HEATING_1_ID,      "Strefa 1",       41, false },
   { HEATING_2_ID,      "Strefa 2",       42, false },
   { HEATING_3_ID,      "Strefa 3",       43, false },
