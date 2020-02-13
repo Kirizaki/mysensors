@@ -72,11 +72,13 @@ void bathroomOff() {
 }
 void kitchenClick() {
   setOutput(KITCHEN_ID);
-  setOutput(KITCHEN_LED_ID);
+  setOutput(KITCHEN_LED1_ID);
+  setOutput(KITCHEN_LED2_ID);
 }
 void kitchenOff() {
   setOutput(KITCHEN_ID, Relay::OFF);
-  setOutput(KITCHEN_LED_ID, Relay::OFF);
+  setOutput(KITCHEN_LED1_ID, Relay::OFF);
+  setOutput(KITCHEN_LED2_ID, Relay::OFF);
   setOutput(KITCHEN_TABLE_ID, Relay::OFF);
 }
 
@@ -111,7 +113,7 @@ void setupButtons() {
 
   kitchen.attachClick(kitchenClick);
   kitchen.attachLongPressStop(kitchenOff);
-  kitchen.attachDoubleClick(clickCallback, KITCHEN_LED_ID);
+  kitchen.attachDoubleClick(clickCallback, KITCHEN_LED1_ID);
 
   kitchenTable.attachClick(clickCallback, KITCHEN_TABLE_ID);
 
