@@ -39,6 +39,7 @@ const uint8_t KITCHEN_LED2_ID   = 63;
 const uint8_t KITCHEN_TABLE_ID  = 64;
 const uint8_t WORKSHOP_ID       = 71;
 const uint8_t CORRIDOR_ID       = 81;
+const uint8_t DOORBELL_ID       = 82;
 const uint8_t HEATING_1_ID      = 10;
 const uint8_t HEATING_2_ID      = 20;
 const uint8_t HEATING_3_ID      = 30;
@@ -71,11 +72,12 @@ SensorsStruct Sensors [] = {
   { MIRROR_ID,         "Lustro",         30, false },
   { FAN_ID,            "Wentylator",     31, false },
   { KITCHEN_ID,        "Kuchnia",        32, false },
-  { KITCHEN_LED1_ID,   "Kuchnia blat",   33, false },
-  { KITCHEN_LED2_ID,   "Kuchnia deko",   34, false },
+  { KITCHEN_LED1_ID,   "Kuchnia LED 1",  33, false },
+  { KITCHEN_LED2_ID,   "Kuchnia LED 2",  34, false },
   { KITCHEN_TABLE_ID,  "Kuchnia stolik", 35, false },
   { WORKSHOP_ID,       "Warsztat",       36, false },
   { CORRIDOR_ID,       "Korytarz",       37, false },
+  { DOORBELL_ID,       "Dzwonek",        38, false },
   { HEATING_1_ID,      "Strefa 1",       41, false },
   { HEATING_2_ID,      "Strefa 2",       42, false },
   { HEATING_3_ID,      "Strefa 3",       43, false },
@@ -108,3 +110,4 @@ OneButton kitchen(A9, true);
 OneButton kitchenTable(A10, true);
 OneButton workshop(A11, true);
 OneButton corridor(A12, true);
+OneButton doorbell(A14, true);

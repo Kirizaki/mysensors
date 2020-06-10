@@ -120,4 +120,8 @@ void setupButtons() {
   workshop.attachClick(clickCallback, WORKSHOP_ID);
 
   corridor.attachClick(clickCallback, CORRIDOR_ID);
+
+  //doorbell.attachPressStart(clickCallback, DOORBELL_ID);
+  doorbell.attachLongPressStart(clickCallback, DOORBELL_ID);
+  doorbell.attachLongPressStop(clickCallback, DOORBELL_ID);
 }

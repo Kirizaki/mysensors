@@ -71,6 +71,7 @@ void loop() {
   kitchenTable.tick();
   workshop.tick();
   corridor.tick();
+  doorbell.tick();
 }
 
 void receive(const MyMessage &message) {
