@@ -69,7 +69,7 @@ void loop() {
   guests.tick();
   bathroom.tick();
   mirror.tick();
-  kitchen.tick();;
+  kitchen.tick();
   kitchenTable.tick();
   workshop.tick();
   corridor.tick();
