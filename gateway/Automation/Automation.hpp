@@ -12,7 +12,7 @@
 #include "../Mapping/Mapping.hpp"
 
 void setOutput(const uint8_t& sensorId, const uint8_t& cmd = Relay::FLIP) {
-  // test whether sensor with given ID exists and get it's index in container
+  // test whether sensor wisetOutputth given ID exists and get it's index in container
   // TODO: Add debug message when idx is wrong & in any other places where: Sensors[idx]
   uint8_t idx = getIdx(sensorId);
   auto sensor = Sensors[idx];
@@ -82,6 +82,10 @@ void kitchenOff() {
   setOutput(KITCHEN_TABLE_ID, Relay::OFF);
 }
 
+void doorbellclick() {
+  dzwonek=1;
+}
+
 void setupButtons() {
   // Setup the button.
   saloon.attachClick(saloonClick);
@@ -121,7 +125,5 @@ void setupButtons() {
 
   corridor.attachClick(clickCallback, CORRIDOR_ID);
 
-  //doorbell.attachPressStart(clickCallback, DOORBELL_ID);
-  doorbell.attachLongPressStart(clickCallback, DOORBELL_ID);
-  doorbell.attachLongPressStop(clickCallback, DOORBELL_ID);
+  doorbell.attachPressStart(doorbellclick);
 }

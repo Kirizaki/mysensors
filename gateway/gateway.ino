@@ -15,6 +15,8 @@
 #define MY_BAUD_RATE 115200
 #endif
 
+uint8_t dzwonek = 0;
+
 // Remember to add library to Arduino path
 #include <MySensors.h>
 #include "./Mapping/Mapping.hpp"
@@ -67,11 +69,24 @@ void loop() {
   guests.tick();
   bathroom.tick();
   mirror.tick();
-  kitchen.tick();
+  kitchen.tick();;
   kitchenTable.tick();
   workshop.tick();
   corridor.tick();
   doorbell.tick();
+
+  if ( dzwonek == 2 ) {
+    if ( !(doorbell.isLongPressed() ) ) {
+      setOutput(DOORBELL_ID, Relay::OFF);
+      dzwonek = 0;
+    }
+  }
+
+  if ( dzwonek == 1 ) {
+    setOutput(DOORBELL_ID, Relay::ON);
+    dzwonek = 2;
+  }
+
 }
 
 void receive(const MyMessage &message) {
