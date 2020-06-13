@@ -75,16 +75,17 @@ void loop() {
   corridor.tick();
   doorbell.tick();
 
-  if ( dzwonek == 2 ) {
-    if ( !(doorbell.isLongPressed() ) ) {
-      setOutput(DOORBELL_ID, Relay::OFF);
-      dzwonek = 0;
-    }
-  }
-
-  if ( dzwonek == 1 ) {
-    setOutput(DOORBELL_ID, Relay::ON);
-    dzwonek = 2;
+  switch (dzwonek) {
+    case 1:
+      setOutput(DOORBELL_ID, Relay::ON);
+      dzwonek = 2;
+      break;
+    case 2:
+      if ( !(doorbell.isLongPressed()) ) {
+        setOutput(DOORBELL_ID, Relay::OFF);
+        dzwonek = 0;
+      }
+      break;
   }
 
 }
