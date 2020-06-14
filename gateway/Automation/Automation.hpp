@@ -82,8 +82,23 @@ void kitchenOff() {
   setOutput(KITCHEN_TABLE_ID, Relay::OFF);
 }
 
-void doorbellclick() {
-  dzwonek=1;
+void doorbellClick() {
+  doorbellState = ON;
+}
+
+void doorbellUpdate(){
+  switch (doorbellState) {
+    case ON:
+      setOutput(DOORBELL_ID, Relay::ON);
+      doorbellState = WaitingForRellese;
+      break;
+    case WaitingForRellese:
+      if ( !(doorbell.isLongPressed()) ) {
+        setOutput(DOORBELL_ID, Relay::OFF);
+        doorbellState = OFF;
+      }
+      break;
+  }
 }
 
 void setupButtons() {
@@ -114,6 +129,7 @@ void setupButtons() {
   bathroom.attachLongPressStop(bathroomOff);
 
   mirror.attachClick(clickCallback, MIRROR_ID);
+  mirror.attachDoubleClick(clickCallback, FAN_ID);
 
   kitchen.attachClick(kitchenClick);
   kitchen.attachLongPressStop(kitchenOff);
@@ -125,5 +141,5 @@ void setupButtons() {
 
   corridor.attachClick(clickCallback, CORRIDOR_ID);
 
-  doorbell.attachPressStart(doorbellclick);
+  doorbell.attachPressStart(doorbellClick);
 }

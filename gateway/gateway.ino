@@ -15,7 +15,8 @@
 #define MY_BAUD_RATE 115200
 #endif
 
-uint8_t dzwonek = 0;
+enum doorbellEnum {OFF, ON, WaitingForRellese};
+doorbellEnum doorbellState = OFF;
 
 // Remember to add library to Arduino path
 #include <MySensors.h>
@@ -49,7 +50,7 @@ void setup() {
 
 void presentation() {
   // Send the sketch version information to the gateway and Controller
-  sendSketchInfo("Gateway", "1.5");
+  sendSketchInfo("Gateway", "1.6");
 
   // Send actual states
   for (uint8_t idx = 0; idx < maxSensors; idx++) {
@@ -75,19 +76,7 @@ void loop() {
   corridor.tick();
   doorbell.tick();
 
-  switch (dzwonek) {
-    case 1:
-      setOutput(DOORBELL_ID, Relay::ON);
-      dzwonek = 2;
-      break;
-    case 2:
-      if ( !(doorbell.isLongPressed()) ) {
-        setOutput(DOORBELL_ID, Relay::OFF);
-        dzwonek = 0;
-      }
-      break;
-  }
-
+  doorbellUpdate();
 }
 
 void receive(const MyMessage &message) {
