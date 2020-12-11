@@ -42,6 +42,7 @@ void saloonClick() {
 void saloonOff() {
   setOutput(SALOON_1_ID, Relay::OFF);
   setOutput(SALOON_2_ID, Relay::OFF);
+  setOutput(SALOON_SHELF_ID, Relay::OFF);
 }
 void gamingRoomClick() {
   setOutput(GAMING_ROOM_1_ID);
@@ -82,8 +83,39 @@ void kitchenOff() {
   setOutput(KITCHEN_TABLE_ID, Relay::OFF);
 }
 
+void doorbellClick() {
+  doorbellState = ON;
+}
+
+void doorbellUpdate(){
+  switch (doorbellState) {
+    case ON:
+      setOutput(DOORBELL_ID, Relay::ON);
+      doorbellState = WaitingForRellese;
+      break;
+    case WaitingForRellese:
+      if ( !(doorbell.isLongPressed()) ) {
+        setOutput(DOORBELL_ID, Relay::OFF);
+        doorbellState = OFF;
+      }
+      break;
+  }
+}
+
+void doorOpen(){
+  send(msgs[maxSensors+1].set(false));
+}
+
+void doorClose() {
+  send(msgs[maxSensors+1].set(true));
+}
+
 void setupButtons() {
   // Setup the button.
+  shelf.attachClick(clickCallback,SALOON_SHELF_ID);
+  shelf.attachLongPressStop(saloonOff);
+  shelf.attachDoubleClick(clickCallback, SALOON_2_ID);
+
   saloon.attachClick(saloonClick);
   saloon.attachLongPressStop(saloonOff);
   saloon.attachDoubleClick(clickCallback, SALOON_2_ID);
@@ -110,6 +142,7 @@ void setupButtons() {
   bathroom.attachLongPressStop(bathroomOff);
 
   mirror.attachClick(clickCallback, MIRROR_ID);
+  mirror.attachDoubleClick(clickCallback, FAN_ID);
 
   kitchen.attachClick(kitchenClick);
   kitchen.attachLongPressStop(kitchenOff);
@@ -117,7 +150,12 @@ void setupButtons() {
 
   kitchenTable.attachClick(clickCallback, KITCHEN_TABLE_ID);
 
-  workshop.attachClick(clickCallback, WORKSHOP_ID);
+  //workshop.attachClick(clickCallback, WORKSHOP_ID);
 
   corridor.attachClick(clickCallback, CORRIDOR_ID);
+  corridor.attachDoubleClick(clickCallback, WORKSHOP_ID);
+
+  doorbell.attachPressStart(doorbellClick);
+  door.attachLongPressStart(doorOpen);
+  door.attachLongPressStop(doorClose);
 }

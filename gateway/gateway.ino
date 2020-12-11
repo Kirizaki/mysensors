@@ -15,6 +15,9 @@
 #define MY_BAUD_RATE 115200
 #endif
 
+enum doorbellEnum {OFF, ON, WaitingForRellese};
+doorbellEnum doorbellState = OFF;
+
 // Remember to add library to Arduino path
 #include <MySensors.h>
 #include "./Mapping/Mapping.hpp"
@@ -43,11 +46,13 @@ void setup() {
     digitalWrite(sensor.pin, bState);
   }
   setupButtons();
+  msgs[maxSensors+1]=MyMessage(DOOR_ID, V_TRIPPED);
+
 }
 
 void presentation() {
   // Send the sketch version information to the gateway and Controller
-  sendSketchInfo("Gateway", "1.5");
+  sendSketchInfo("Gateway", "1.7");
 
   // Send actual states
   for (uint8_t idx = 0; idx < maxSensors; idx++) {
@@ -55,10 +60,13 @@ void presentation() {
     present(sensor.id, S_BINARY, sensor.description);
     send(msgs[idx].set(loadState(sensor.id)));
   }
+  present(DOOR_ID, S_DOOR, "kontaktron drzwi");
+  send(msgs[maxSensors+1].set(true));
 }
 
 void loop() {
   // Keep sensing buttons
+  shelf.tick();
   saloon.tick();
   gamingRoom.tick();
   bedroom.tick();
@@ -69,8 +77,12 @@ void loop() {
   mirror.tick();
   kitchen.tick();
   kitchenTable.tick();
-  workshop.tick();
+  //workshop.tick();
   corridor.tick();
+  doorbell.tick();
+  door.tick();
+
+  doorbellUpdate();
 }
 
 void receive(const MyMessage &message) {
