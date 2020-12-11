@@ -52,7 +52,7 @@ void setup() {
 
 void presentation() {
   // Send the sketch version information to the gateway and Controller
-  sendSketchInfo("Gateway", "1.6");
+  sendSketchInfo("Gateway", "1.7");
 
   // Send actual states
   for (uint8_t idx = 0; idx < maxSensors; idx++) {

@@ -88,7 +88,7 @@ SensorsStruct Sensors [] = {
   { HEATING_7_ID,      "Strefa 7",       47, false },
 };
 const uint8_t maxSensors = sizeof(Sensors) / sizeof(SensorsStruct);
-MyMessage msgs[maxSensors+1];
+MyMessage msgs[maxSensors+1]; //door is extra case
 
 uint8_t getIdx(uint8_t sensorId) {
   for (uint8_t i = 0; i < maxSensors; i++) {
