@@ -40,6 +40,7 @@ const uint8_t KITCHEN_TABLE_ID  = 64;
 const uint8_t WORKSHOP_ID       = 71;
 const uint8_t CORRIDOR_ID       = 81;
 const uint8_t DOORBELL_ID       = 82;
+const uint8_t DOOR_ID           = 83;
 const uint8_t HEATING_1_ID      = 10;
 const uint8_t HEATING_2_ID      = 20;
 const uint8_t HEATING_3_ID      = 30;
@@ -87,7 +88,7 @@ SensorsStruct Sensors [] = {
   { HEATING_7_ID,      "Strefa 7",       47, false },
 };
 const uint8_t maxSensors = sizeof(Sensors) / sizeof(SensorsStruct);
-MyMessage msgs[maxSensors];
+MyMessage msgs[maxSensors+1];
 
 uint8_t getIdx(uint8_t sensorId) {
   for (uint8_t i = 0; i < maxSensors; i++) {
@@ -98,6 +99,7 @@ uint8_t getIdx(uint8_t sensorId) {
 
 // Pushbuttons declaration
 // Remember that names should be consistent with main loop in gateway.ino
+OneButton shelf(A0,true);
 OneButton saloon(A1, true);
 OneButton gamingRoom(A2, true);
 OneButton bedroom(A3, true);
@@ -108,6 +110,7 @@ OneButton bathroom(A7, true);
 OneButton mirror(A8, true);
 OneButton kitchen(A9, true);
 OneButton kitchenTable(A10, true);
-OneButton workshop(A11, true);
+//OneButton workshop(A11, true);
 OneButton corridor(A12, true);
+OneButton door(A13, true);
 OneButton doorbell(A14, true);
